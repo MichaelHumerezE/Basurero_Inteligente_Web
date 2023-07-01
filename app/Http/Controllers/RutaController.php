@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Ruta;
 use App\Http\Requests\StoreRutaRequest;
 use App\Http\Requests\UpdateRutaRequest;
+use App\Models\Horario;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class RutaController extends Controller
 {
@@ -13,9 +16,20 @@ class RutaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $rutas = ruta::select('*')->orderBy('id','ASC');
+        $limit = (isset($request->limit)) ? $request->limit:10;
+        if(isset($request->search)){
+            $rutas = $rutas->where('id','like','%'.$request->search.'%')
+            ->orWhere('nombre','like','%'.$request->search.'%')
+            ->orWhere('descripcion','like','%'.$request->search.'%')
+            ->orWhere('origen','like','%'.$request->search.'%')
+            ->orWhere('destino','like','%'.$request->search.'%')
+            ->orWhere('coordenadas','like','%'.$request->search.'%');
+        }
+        $rutas = $rutas->paginate($limit)->appends($request->all());
+        return view('rutas.index', compact('rutas'));
     }
 
     /**
@@ -25,7 +39,9 @@ class RutaController extends Controller
      */
     public function create()
     {
-        //
+        $puntos = [];
+        $horarios = Horario::get();
+        return view('rutas.create', compact('horarios', 'puntos'));
     }
 
     /**
@@ -36,7 +52,8 @@ class RutaController extends Controller
      */
     public function store(StoreRutaRequest $request)
     {
-        //
+        Ruta::create($request->validated());
+        return redirect()->route('rutas.index')->with('mensaje', 'ruta Agregado Con Éxito');
     }
 
     /**
@@ -45,9 +62,14 @@ class RutaController extends Controller
      * @param  \App\Models\Ruta  $ruta
      * @return \Illuminate\Http\Response
      */
-    public function show(Ruta $ruta)
+    public function show($id)
     {
-        //
+        $ruta = ruta::where('id', '=', $id)->firstOrFail();
+        $puntos = json_decode($ruta->coordenadas);
+        $origen = json_decode($ruta->origen);
+        $destino = json_decode($ruta->destino);
+        $horarios = Horario::get();
+        return view('rutas.show', compact('ruta', 'puntos', 'origen', 'destino', 'horarios'));
     }
 
     /**
@@ -56,7 +78,7 @@ class RutaController extends Controller
      * @param  \App\Models\Ruta  $ruta
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ruta $ruta)
+    public function edit($id)
     {
         //
     }
@@ -68,7 +90,7 @@ class RutaController extends Controller
      * @param  \App\Models\Ruta  $ruta
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRutaRequest $request, Ruta $ruta)
+    public function update(UpdateRutaRequest $request, $id)
     {
         //
     }
@@ -79,8 +101,14 @@ class RutaController extends Controller
      * @param  \App\Models\Ruta  $ruta
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ruta $ruta)
+    public function destroy($id)
     {
-        //
+        $ruta = ruta::findOrFail($id);
+        try{
+            $ruta->delete();
+            return redirect()->route('rutas.index')->with('message', 'Se han borrado los datos correctamente.');
+        }catch(QueryException $e){
+            return redirect()->route('rutas.index')->with('danger', 'Datos relacionados, imposible borrar dato.');
+        }
     }
 }

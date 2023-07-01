@@ -13,7 +13,7 @@ class UpdateHorarioRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateHorarioRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'dia_semana' => 'required',
+            'hora_inicio' => 'required',
+            'hora_fin' => 'required',
         ];
     }
 }

@@ -1,6 +1,6 @@
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="active">
             <div class="sidebar-header">
                 <h3>Servicio De Internet</h3>
                 <strong>SI</strong>
@@ -38,30 +38,17 @@
                         </li>
                     </ul>
                 </li>
-                <li
-                    class="{{ 'turnos' == Request::is('turnos*') ? 'active' : '' }} or {{ 'detalleTurnos' == Request::is('detalleTurnos*') ? 'active' : '' }}">
-                    <a href="#ServiceMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-home"></i>
-                        <b>Administración De Servicios</b>
+                <li class="{{ 'horarios' == Request::is('horarios*') ? 'active' : '' }}">
+                    <a href="{{ url('/horarios') }}">
+                        <i class="fas fa-clock"></i>
+                        <b> Horarios</b>
                     </a>
-                    <ul class="collapse list-unstyled" id="ServiceMenu">
-                        <li>
-                            <a href="#"><b>Nota De Servicio</b></a>
-                        </li>
-                        <li>
-                            <a href="#"><b>Nota De Solicitud</b></a>
-                        </li>
-                        <li>
-                            <a href="#"><b>Asistencia</b></a>
-                        </li>
-                        <li class="{{ 'turnos' == Request::is('turnos*') ? 'active' : '' }}">
-                            <a href="{{ url('/turnos') }}"><i class="fas fa-clock"></i> <b>Turnos</b></a>
-                        </li>
-                        <li class="{{ 'detalleTurnos' == Request::is('detalleTurnos*') ? 'active' : '' }}">
-                            <a href="{{ url('/detalleTurnos') }}"><i class="fas fa-user-clock"></i> <b>Asignar
-                                    Turno</b></a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="{{ 'rutas' == Request::is('rutas*') ? 'active' : '' }}">
+                    <a href="{{ url('/rutas') }}">
+                        <i class="fas fa-road"></i>
+                        <b> Rutas</b>
+                    </a>
                 </li>
                 <li>
                     <a href="#">

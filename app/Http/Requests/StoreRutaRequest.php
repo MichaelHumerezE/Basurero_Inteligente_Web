@@ -13,7 +13,7 @@ class StoreRutaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class StoreRutaRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nombre' => 'required',
+            'coordenadas' => 'required',
+            'id_horario' => 'required',
+            'origen' => '',
+            'destino' => ''
         ];
     }
 }

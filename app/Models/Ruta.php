@@ -14,7 +14,7 @@ class Ruta extends Model
         'descripcion',
         'origen',
         'destino',
-        'polyline',
+        'coordenadas',
         'id_horario',
     ];
 }

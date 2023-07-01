@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
+    'google_api_key' => env('GOOGLE_API_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

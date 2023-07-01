@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\RutaController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -46,4 +48,6 @@ Route::group(['middleware'=>['auth']], function(){
     route::resource('/perfil', PerfilController::class);
     route::resource('/password', PasswordController::class);
     route::resource('/roles', RolController::class);
+    route::resource('/horarios', HorarioController::class);
+    route::resource('/rutas', RutaController::class);
 });
