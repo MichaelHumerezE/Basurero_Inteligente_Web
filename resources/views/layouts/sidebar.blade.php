@@ -68,63 +68,20 @@
                         <b> Areas Críticas</b>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        <b>About</b>
-                    </a>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-copy"></i>
-                        <b>Pages</b>
-                    </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#"><b>Page 1</b></a>
-                        </li>
-                        <li>
-                            <a href="#"><b>Page 2</b></a>
-                        </li>
-                        <li>
-                            <a href="#"><b>Page 3</b></a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-image"></i>
-                        <b>Portfolio</b>
+                <li class="{{ 'alarmas' == Request::is('alarmas*') ? 'active' : '' }}">
+                    <a href="{{ url('/alarmas') }}">
+                        <i class="fas fa-bell"></i>
+                        <b> Alarmas</b>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-question"></i>
-                        <b> FAQ</b>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-paper-plane"></i>
-                        <b>Contact</b>
+                <li class="{{ 'reclamos' == Request::is('reclamos*') ? 'active' : '' }}">
+                    <a href="{{ url('/reclamos') }}">
+                        <i class="fas fa-exclamation"></i>
+                        <b> Reclamos</b>
                     </a>
                 </li>
             </ul>
         </nav>
-        <!-- Page Content  -->
-        <!--<div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-info">
-                        <i class="fas fa-align-left"></i>
-                        <span>Toggle Sidebar</span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-                </div>
-            </nav>
-        </div>-->
     </div>
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

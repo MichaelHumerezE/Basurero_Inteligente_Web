@@ -27,7 +27,7 @@ class EmpleadoSeeder extends Seeder
             'estado' => '1',
             'tipoc' => '0',
             'tipoe' => '1',
-        ]);
+        ])->assignRole('Administrador');
 
         User::create([
             'name' => 'Michael',
@@ -41,7 +41,7 @@ class EmpleadoSeeder extends Seeder
             'estado' => '1',
             'tipoc' => '0',
             'tipoe' => '1',
-        ]);
+        ])->assignRole('Administrador');
         
         User::create([
             'name' => 'Brayan',
@@ -55,7 +55,7 @@ class EmpleadoSeeder extends Seeder
             'estado' => '1',
             'tipoc' => '0',
             'tipoe' => '1',
-        ]);
+        ])->assignRole('Administrador');
 
         User::create([
             'name' => 'Camilo',

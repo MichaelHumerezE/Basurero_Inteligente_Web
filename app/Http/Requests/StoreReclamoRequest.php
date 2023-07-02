@@ -13,7 +13,7 @@ class StoreReclamoRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreReclamoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'descripcion' => 'required',
+            'fechaHora' => 'required',
+            'id_cliente' => 'required',
         ];
     }
 }

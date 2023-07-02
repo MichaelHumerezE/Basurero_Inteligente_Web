@@ -11,6 +11,7 @@ class Reclamo extends Model
 
     protected $fillable = [
         'descripcion',
-        'fecha',
+        'fechaHora',
+        'id_cliente',
     ];
 }

@@ -13,7 +13,7 @@ class StoreRecepcionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreRecepcionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'fechaHora' => 'required',
+            'cantidad' => 'required',
+            'id_basura' => 'required',
+            'id_ruta' => 'required',
         ];
     }
 }

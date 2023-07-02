@@ -11,7 +11,9 @@ class Alarma extends Model
     
     protected $fillable = [
         'nombre',
-        'hora',
-        'fecha',
+        'fechaHora',
+        'radio',
+        'estado',
+        'id_cliente',
     ];
 }

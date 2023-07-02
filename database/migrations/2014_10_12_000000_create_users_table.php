@@ -35,10 +35,11 @@ return new class extends Migration
             //PERSONAL
             $table->string('licencia')->nullable();
             $table->string('cargo')->nullable();
-            $table->string('sueldo')->nullable();
+            $table->unsignedMediumInteger('sueldo')->nullable();
             $table->string('descripcion')->nullable();
-            $table->smallInteger('tipoc')->nullable();
-            $table->smallInteger('tipoe')->nullable();
+            $table->smallInteger('tipoc');
+            $table->smallInteger('tipoe');
+            $table->foreign('id_ruta')->references('id')->on('rutas')->onDelete('cascade')->onUpdate('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

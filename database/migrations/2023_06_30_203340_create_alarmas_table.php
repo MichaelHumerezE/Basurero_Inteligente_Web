@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('alarmas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->time('hora');
-            $table->date('fecha');
-           // $table->string('distancia'); // revisar
+            $table->dateTime('fechaHora');
+            $table->unsignedMediumInteger('radio');
+            $table->unsignedTinyInteger('estado');
+            $table->unsignedBigInteger('id_cliente');
+            $table->foreign('id_cliente')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

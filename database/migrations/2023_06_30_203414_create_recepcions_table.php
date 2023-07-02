@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('recepcions', function (Blueprint $table) {
             $table->id();
-            $table->datetime('fecha');
+            $table->datetime('fechaHora');
             $table->double('cantidad');
             $table->unsignedBigInteger('id_basura');
             $table->unsignedBigInteger('id_ruta');

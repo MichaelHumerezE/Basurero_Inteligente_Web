@@ -85,7 +85,11 @@
                                     <td>{{ $empleado->sexo }}</td>
                                     <td>{{ $empleado->phone }}</td>
                                     <td>{{ $empleado->domicilio }}</td>
-                                    <td>{{ $empleado->estado }}</td>
+                                    @if ($empleado->estado = 1)
+                                        <td>Activo</td>
+                                    @else
+                                        <td>Inactivo</td>
+                                    @endif
                                     <td>
                                         @if (!empty($empleado->getRoleNames()))
                                             @foreach ($empleado->getRoleNames() as $rolname)

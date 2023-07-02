@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlarmaController;
 use App\Http\Controllers\AreaCriticaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DistritoController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\RutaController;
 use App\Http\Controllers\UserController;
@@ -56,4 +58,6 @@ Route::group(['middleware'=>['auth']], function(){
     route::resource('/areasCriticas', AreaCriticaController::class);
     route::resource('/distritos', DistritoController::class);
     route::resource('/zonas', ZonaController::class);
+    route::resource('/alarmas', AlarmaController::class);
+    route::resource('/reclamos', ReclamoController::class);
 });

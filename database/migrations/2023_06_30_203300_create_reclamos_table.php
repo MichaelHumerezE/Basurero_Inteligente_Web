@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('reclamos', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion');
-            $table->datetime('fecha');
+            $table->datetime('fechaHora');
+            $table->unsignedBigInteger('id_cliente');
+            $table->foreign('id_cliente')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

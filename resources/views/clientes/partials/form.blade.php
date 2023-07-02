@@ -16,6 +16,13 @@
     </div>
     <div class="col-12">
         <div class="form-floating">
+            <input type="file" placeholder="image" class="form-control" name="image"
+                value="{{ isset($cliente) ? $cliente->image : old('image') }}">
+            <label>Imagen</label>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-floating">
             <input type="number" placeholder="ci" class="form-control" name="ci"
                 value="{{ isset($cliente) ? $cliente->ci : old('ci') }}">
             <label>CI</label>
@@ -68,6 +75,35 @@
             </div>
         </div>
     @endif
+    <div class="col-12">
+        <div class="form-floating">
+            <input type="double" placeholder="latitud" class="form-control" name="latitud"
+                value="{{ isset($cliente) ? $cliente->latitud : old('latitud') }}">
+            <label>Latitud</label>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-floating">
+            <input type="double" placeholder="longitud" class="form-control" name="longitud"
+                value="{{ isset($cliente) ? $cliente->longitud : old('longitud') }}">
+            <label>Longitud</label>
+        </div>
+    </div>
+    <div class="col-12">
+        <br>
+        <label>
+            <h5>Elegir Una Ruta</h5>
+        </label>
+        <select name="id_ruta" class="form-control">
+            <option value=""> Seleccione Una Ruta... </option>
+            @foreach ($rutas as $ruta)
+                <option value="{{ $ruta->id }}" @if ((isset($ruta->id_ruta) ? $ruta->id_ruta : old('id_ruta')) == $ruta->id) selected @endif>
+                    {{ $ruta->nombre }}
+                </option>
+            @endforeach
+        </select>
+        <br>
+    </div>
     <input type="hidden" name="tipoc" class="form-control" id="exampleInputPassword1" value="1">
     <input type="hidden" name="tipoe" class="form-control" id="exampleInputPassword1" value="0">
 </div>

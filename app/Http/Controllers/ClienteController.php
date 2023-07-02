@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Ruta;
 
 class ClienteController extends Controller
 {
@@ -48,7 +49,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return view('clientes.create');
+        $rutas = Ruta::get();
+        return view('clientes.create', compact('rutas'));
     }
 
     /**
@@ -72,7 +74,8 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
-        return view('clientes.show', compact('cliente'));
+        $rutas = Ruta::get();
+        return view('clientes.show', compact('cliente', 'rutas'));
     }
 
     /**
@@ -84,7 +87,8 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
-        return view('clientes.edit', compact('cliente'));
+        $rutas = Ruta::get();
+        return view('clientes.edit', compact('cliente', 'rutas'));
     }
 
     /**

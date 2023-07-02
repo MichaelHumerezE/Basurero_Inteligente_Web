@@ -8,6 +8,9 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreEmpleadoRequest;
+use App\Http\Requests\UpdateEmpleadoRequest;
+use App\Http\Requests\UpdateEmpresaRequest;
 use App\Http\Requests\UpdateUserRequest;
 
 class EmpleadoController extends Controller
@@ -28,19 +31,18 @@ class EmpleadoController extends Controller
      */
     public function index(Request $request)
     {
-        //$empleados = User::get()->where('tipoe','=','1');
-        $empleados = User::select('*')->orderBy('id','ASC')->where('tipoe','=',1);
-        $limit = (isset($request->limit)) ? $request->limit:10;
-        if(isset($request->search)){
-            $empleados = $empleados->where('id','like','%'.$request->search.'%')
-            ->orWhere('name','like','%'.$request->search.'%')
-            ->orWhere('apellidos','like','%'.$request->search.'%')
-            ->orWhere('email','like','%'.$request->search.'%')
-            ->orWhere('ci','like','%'.$request->search.'%')
-            ->orWhere('sexo','like','%'.$request->search.'%')
-            ->orWhere('phone','like','%'.$request->search.'%')
-            ->orWhere('domicilio','like','%'.$request->search.'%')
-            ->orWhere('estado','like','%'.$request->search.'%');
+        $empleados = User::select('*')->orderBy('id', 'ASC')->where('tipoe', '=', 1);
+        $limit = (isset($request->limit)) ? $request->limit : 10;
+        if (isset($request->search)) {
+            $empleados = $empleados->where('id', 'like', '%' . $request->search . '%')
+                ->orWhere('name', 'like', '%' . $request->search . '%')
+                ->orWhere('apellidos', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('ci', 'like', '%' . $request->search . '%')
+                ->orWhere('sexo', 'like', '%' . $request->search . '%')
+                ->orWhere('phone', 'like', '%' . $request->search . '%')
+                ->orWhere('domicilio', 'like', '%' . $request->search . '%')
+                ->orWhere('estado', 'like', '%' . $request->search . '%');
         }
         $empleados = $empleados->paginate($limit)->appends($request->all());
         return view('empleados.index', compact('empleados'));
@@ -54,7 +56,8 @@ class EmpleadoController extends Controller
     public function create()
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('empleados.create', compact('roles'));
+        $empRole = '';
+        return view('empleados.create', compact('roles', 'empRole'));
     }
 
     /**
@@ -63,32 +66,13 @@ class EmpleadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RegisterRequest $request)
+    public function store(StoreEmpleadoRequest $request)
     {
-        /*$empleado = new User();
-        $empleado = $this->crearUpdate($request, $empleado);
-        return redirect()->route('empleados.index')->with('message', 'Se han creado los datos correctamente.');*/
-        $this->validate($request, ['roles' => 'required']);
+        //$this->validate($request, ['roles' => 'required']);
         $user = User::create($request->validated());
         $user->assignRole($request->input('roles'));
         return redirect()->route('empleados.index')->with('mensaje', 'Empleado Agregado Con Éxito');
-    
     }
-
-    /*public function crearUpdate(Request $request, $empleado){
-        $empleado->name = $request->name;
-        $empleado->apellidos = $request->apellidos;
-        $empleado->email = $request->email;
-        $empleado->password = $request->password;
-        $empleado->ci = $request->ci;
-        $empleado->sexo = $request->sexo;
-        $empleado->phone = $request->phone;
-        $empleado->domicilio = $request->domicilio;
-        $empleado->estado = $request->estado;
-        $empleado->tipoc = $request->tipoc;
-        $empleado->tipoe = $request->tipoe;
-        $empleado->save();
-    }*/
 
     /**
      * Display the specified resource.
@@ -125,10 +109,9 @@ class EmpleadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateEmpleadoRequest $request, $id)
     {
-        /*$empleado = User::where('id', '=', $id)->firstOrFail();
-        $empleado = $this->crearUpdate($request, $empleado);*/
+        $this->validate($request, ['roles' => 'required']);
         $empleado = User::find($id);
         $empleado->update($request->validated());
         DB::table('model_has_roles')->where('model_id', $id)->delete();
@@ -145,10 +128,10 @@ class EmpleadoController extends Controller
     public function destroy($id)
     {
         $empleado = User::findOrFail($id);
-        try{
+        try {
             $empleado->delete();
             return redirect()->route('empleados.index')->with('message', 'Se han borrado los datos correctamente.');
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             return redirect()->route('empleados.index')->with('danger', 'Datos relacionados con otras tablas, imposible borrar datos.');
         }
     }
