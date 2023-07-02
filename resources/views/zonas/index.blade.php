@@ -2,7 +2,7 @@
 @section('content')
     <div class="card mt-3">
         <div class="card-header d-inline-flex">
-            <h1>Rutas</h1>
+            <h1>Zonas</h1>
         </div>
         <div class="card-body">
             <div class="row">
@@ -31,7 +31,7 @@
                         ?>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-7">
                     <div class="form-group">
                         <a class="navbar-brand">Buscar</a>
                         <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search"
@@ -39,14 +39,14 @@
                     </div>
                 </div>
                 <div class="col-1">
-                    @can('crear-ruta')
-                        <a href="{{ route('rutas.create') }}" class="btn btn-primary ml-auto">
+                    @can('crear-zona')
+                        <a href="{{ route('zonas.create') }}" class="btn btn-primary ml-auto">
                             <i class="fas fa-plus"></i>
                             Agregar</a>
                     @endcan
                 </div>
-                @if ($rutas->total() > 10)
-                    {{ $rutas->links() }}
+                @if ($zonas->total() > 10)
+                    {{ $zonas->links() }}
                 @endif
             </div>
             <div class="table-responsive">
@@ -55,9 +55,6 @@
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -69,30 +66,28 @@
                         }
                         //$valor = 1;
                         ?>
-                        @foreach ($rutas as $ruta)
+                        @foreach ($zonas as $zona)
                             <tr>
                                 <th scope="row">{{ $valor++ }}</th>
-                                <td>{{ $ruta->nombre }}</td>
-                                <td>{{ $ruta->descripcion }}</td>
-                                <td>{{ $ruta->origen }}</td>
-                                <td>{{ $ruta->destino }}</td>
+                                <td>{{ $zona->nombre }}</td>
+                                <td>{{ $zona->descripcion }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        @can('ver-ruta')
-                                            <a href="{{ route('rutas.show', $ruta->id) }}" class="btn btn-info"><i
+                                        @can('ver-zona')
+                                            <a href="{{ route('zonas.show', $zona->id) }}" class="btn btn-info"><i
                                                     class="fas fa-eye"></i></a>
                                         @endcan
-                                        @can('editar-ruta')
-                                            <a href="{{ route('rutas.edit', $ruta->id) }}"
-                                                class="btn btn-primary"><i class="fas fa-map"></i></a>
+                                        @can('editar-zona')
+                                            <a href="{{ route('zonas.edit', $zona->id) }}" class="btn btn-primary"><i
+                                                    class="fas fa-pencil-alt"></i></a>
                                         @endcan
-                                        @can('borrar-ruta')
-                                            <button type="submit" class="btn btn-danger" form="delete_{{ $ruta->id }}"
+                                        @can('borrar-zona')
+                                            <button type="submit" class="btn btn-danger" form="delete_{{ $zona->id }}"
                                                 onclick="return confirm('¿Estás seguro de eliminar el registro?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            <form action="{{ route('rutas.destroy', $ruta->id) }}"
-                                                id="delete_{{ $ruta->id }}" method="POST" enctype="multipart/form-data"
+                                            <form action="{{ route('zonas.destroy', $zona->id) }}"
+                                                id="delete_{{ $zona->id }}" method="POST" enctype="multipart/form-data"
                                                 hidden>
                                                 @csrf
                                                 @method('DELETE')
@@ -107,21 +102,21 @@
             </div>
         </div>
         <div class="card-footer">
-            @if ($rutas->total() > 10)
-                {{ $rutas->links() }}
+            @if ($zonas->total() > 10)
+                {{ $zonas->links() }}
             @endif
         </div>
     </div>
     <!-- JS PARA FILTAR Y BUSCAR MEDIANTE PAGINADO -->
     <Script type="text/javascript">
         $('#limit').on('change', function() {
-            window.location.href = "{{ route('rutas.index') }}?limit=" + $(this).val() + '&search=' + $(
+            window.location.href = "{{ route('zonas.index') }}?limit=" + $(this).val() + '&search=' + $(
                 '#search').val()
         })
 
         $('#search').on('keyup', function(e) {
             if (e.keyCode == 13) {
-                window.location.href = "{{ route('rutas.index') }}?limit=" + $('#limit').val() + '&search=' +
+                window.location.href = "{{ route('zonas.index') }}?limit=" + $('#limit').val() + '&search=' +
                     $(this).val()
             }
         })

@@ -10,7 +10,9 @@ class AreaCritica extends Model
     use HasFactory;
 
     protected $fillable = [
-        'polyline',
+        'latitud',
+        'longitud',
+        'radio',
         'id_ruta',
     ];
 }

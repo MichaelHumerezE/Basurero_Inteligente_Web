@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required'],
             'apellidos' => [''],
+            'image' => [''],
             'email' => ['required', 'unique:users,email'],
             'password' => ['required', 'min:6'],
             'password_confirmation' => ['required', 'same:password'],
@@ -36,6 +37,13 @@ class RegisterRequest extends FormRequest
             'estado' => [''],
             'tipoc' => ['required'],
             'tipoe' => ['required'],
+            'latitud' => [''],
+            'longitud' => [''],
+            'id_ruta' => [''],
+            'licencia' => [''],
+            'cargo' => [''],
+            'sueldo' => [''],
+            'descripcion' => [''],
         ];
     }
 }

@@ -30,6 +30,21 @@
         <br>
     </div>
     <div class="col-12">
+        <br>
+        <label>
+            <h5>Elegir un Distrito</h5>
+        </label>
+        <select name="id_distrito" class="form-control">
+            <option value=""> Seleccione Un Distrito... </option>
+            @foreach ($distritos as $distrito)
+                <option value="{{ $distrito->id }}" @if ((isset($ruta->id_distrito) ? $ruta->id_distrito : old('id_distrito')) == $distrito->id) selected @endif>
+                    {{ $distrito->nombre }}
+                </option>
+            @endforeach
+        </select>
+        <br>
+    </div>
+    <div class="col-12">
         <div class="form-floating">
             <input type="hidden" name="coordenadas" value="" id="coordenadas">
         </div>
@@ -49,9 +64,8 @@
 
 <div id="map" style="width: 100%; height: 400px;"></div>
 
-<script
-    src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_API_KEY')}}&callback=initMap&v=weekly"
-    defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&callback=initMap&v=weekly" defer>
+</script>
 
 <script>
     let markers = [];
@@ -114,6 +128,7 @@
                         });
                     }
                 }
+                cargarAreasCriticas(map);
             });
         } else {
             // Manejar el caso en el que el navegador no admita la geolocalización
@@ -172,6 +187,7 @@
                     });
                 }
             }
+            cargarAreasCriticas(map);
         }
     }
 
@@ -205,6 +221,46 @@
             document.getElementById("coordenadas").value = JSON.stringify(coords);
             document.getElementById("origen").value = JSON.stringify(origen);
             document.getElementById("destino").value = JSON.stringify(destino);
+        }
+    }
+
+    function cargarAreasCriticas(map) {
+        <?php
+        if (isset($areasCriticas)) {
+            $points = json_encode($areasCriticas);
+        } else {
+            $points = '';
+        }
+        ?>
+
+        var points = '<?php echo $points; ?>';
+
+        if (points !== '') {
+            areasMarkers = [];
+            points = JSON.parse(points);
+            for (let i = 0; i < points.length; i++) {
+                const element = points[i];
+                // Crea el marcador
+                areasMarkers[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(element.latitud, element.longitud),
+                    map: map,
+                    icon: {
+                        url: '/assets/img/icons/critico.png', // Ruta al archivo de ícono personalizado
+                        scaledSize: new google.maps.Size(30, 30), // Tamaño personalizado del ícono
+                    }
+                });
+
+                var circle = new google.maps.Circle({
+                    map: map,
+                    center: areasMarkers[i].getPosition(),
+                    radius: element.radio,
+                    strokeColor: '#000000', // Color del borde del círculo (en este caso, rojo)
+                    strokeOpacity: 0.8, // Opacidad del borde del círculo
+                    strokeWeight: 2, // Grosor del borde del círculo
+                    fillColor: '#000000', // Color de relleno del círculo (en este caso, rojo)
+                    fillOpacity: 0.35 // Opacidad del relleno del círculo
+                });
+            }
         }
     }
 </script>

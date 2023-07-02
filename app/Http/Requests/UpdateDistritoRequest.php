@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAreaCriticaRequest extends FormRequest
+class UpdateDistritoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,9 @@ class UpdateAreaCriticaRequest extends FormRequest
     public function rules()
     {
         return [
-            'latitud' => 'required',
-            'longitud' => 'required',
-            'radio' => 'required',
-            'id_ruta' => 'required',
+            'nombre' => 'required',
+            'descripcion' => '',
+            'id_zona' => 'required',
         ];
     }
 }

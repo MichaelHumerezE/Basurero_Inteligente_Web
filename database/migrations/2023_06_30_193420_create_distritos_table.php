@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('area_criticas', function (Blueprint $table) {
+        Schema::create('distritos', function (Blueprint $table) {
             $table->id();
-            $table->double('latitud');
-            $table->double('longitud');
-            $table->double('radio');
-            $table->unsignedBigInteger('id_ruta');
-            $table->foreign('id_ruta')->references('id')->on('rutas')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('nombre');
+            $table->string('descripcion')->nullable();
+            $table->unsignedBigInteger('id_zona');
+            $table->foreign('id_zona')->references('id')->on('zonas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('area_criticas');
+        Schema::dropIfExists('distritos');
     }
 };

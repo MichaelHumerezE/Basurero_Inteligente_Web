@@ -13,7 +13,7 @@ class StoreAreaCriticaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreAreaCriticaRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'latitud' => 'required',
+            'longitud' => 'required',
+            'radio' => 'required',
+            'id_ruta' => 'required',
         ];
     }
 }

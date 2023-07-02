@@ -2,7 +2,7 @@
 @section('content')
     <div class="card mt-3">
         <div class="card-header d-inline-flex">
-            <h1>Rutas</h1>
+            <h1>Areas Criticas</h1>
         </div>
         <div class="card-body">
             <div class="row">
@@ -39,14 +39,14 @@
                     </div>
                 </div>
                 <div class="col-1">
-                    @can('crear-ruta')
-                        <a href="{{ route('rutas.create') }}" class="btn btn-primary ml-auto">
+                    @can('crear-areaCritica')
+                        <a href="{{ route('areasCriticas.create') }}" class="btn btn-primary ml-auto">
                             <i class="fas fa-plus"></i>
                             Agregar</a>
                     @endcan
                 </div>
-                @if ($rutas->total() > 10)
-                    {{ $rutas->links() }}
+                @if ($areasCriticas->total() > 10)
+                    {{ $areasCriticas->links() }}
                 @endif
             </div>
             <div class="table-responsive">
@@ -54,10 +54,10 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
+                            <th>Latitud</th>
+                            <th>Longitud</th>
+                            <th>Radio</th>
+                            <th>Ruta</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -69,30 +69,30 @@
                         }
                         //$valor = 1;
                         ?>
-                        @foreach ($rutas as $ruta)
+                        @foreach ($areasCriticas as $areaCritica)
                             <tr>
                                 <th scope="row">{{ $valor++ }}</th>
-                                <td>{{ $ruta->nombre }}</td>
-                                <td>{{ $ruta->descripcion }}</td>
-                                <td>{{ $ruta->origen }}</td>
-                                <td>{{ $ruta->destino }}</td>
+                                <td>{{ $areaCritica->latitud }}</td>
+                                <td>{{ $areaCritica->longitud }}</td>
+                                <td>{{ $areaCritica->radio }}</td>
+                                <td>{{ $areaCritica->id_ruta }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        @can('ver-ruta')
-                                            <a href="{{ route('rutas.show', $ruta->id) }}" class="btn btn-info"><i
-                                                    class="fas fa-eye"></i></a>
+                                        @can('ver-areaCritica')
+                                            <a href="{{ route('areasCriticas.show', $areaCritica->id) }}"
+                                                class="btn btn-info"><i class="fas fa-eye"></i></a>
                                         @endcan
-                                        @can('editar-ruta')
-                                            <a href="{{ route('rutas.edit', $ruta->id) }}"
-                                                class="btn btn-primary"><i class="fas fa-map"></i></a>
+                                        @can('editar-areaCritica')
+                                            <a href="{{ route('areasCriticas.edit', $areaCritica->id) }}"
+                                                class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
                                         @endcan
-                                        @can('borrar-ruta')
-                                            <button type="submit" class="btn btn-danger" form="delete_{{ $ruta->id }}"
+                                        @can('borrar-areaCritica')
+                                            <button type="submit" class="btn btn-danger" form="delete_{{ $areaCritica->id }}"
                                                 onclick="return confirm('¿Estás seguro de eliminar el registro?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            <form action="{{ route('rutas.destroy', $ruta->id) }}"
-                                                id="delete_{{ $ruta->id }}" method="POST" enctype="multipart/form-data"
+                                            <form action="{{ route('areasCriticas.destroy', $areaCritica->id) }}"
+                                                id="delete_{{ $areaCritica->id }}" method="POST" enctype="multipart/form-data"
                                                 hidden>
                                                 @csrf
                                                 @method('DELETE')
@@ -107,21 +107,22 @@
             </div>
         </div>
         <div class="card-footer">
-            @if ($rutas->total() > 10)
-                {{ $rutas->links() }}
+            @if ($areasCriticas->total() > 10)
+                {{ $areasCriticas->links() }}
             @endif
         </div>
     </div>
     <!-- JS PARA FILTAR Y BUSCAR MEDIANTE PAGINADO -->
     <Script type="text/javascript">
         $('#limit').on('change', function() {
-            window.location.href = "{{ route('rutas.index') }}?limit=" + $(this).val() + '&search=' + $(
+            window.location.href = "{{ route('areasCriticas.index') }}?limit=" + $(this).val() + '&search=' + $(
                 '#search').val()
         })
 
         $('#search').on('keyup', function(e) {
             if (e.keyCode == 13) {
-                window.location.href = "{{ route('rutas.index') }}?limit=" + $('#limit').val() + '&search=' +
+                window.location.href = "{{ route('areasCriticas.index') }}?limit=" + $('#limit').val() +
+                    '&search=' +
                     $(this).val()
             }
         })

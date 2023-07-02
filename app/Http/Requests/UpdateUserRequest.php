@@ -26,6 +26,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required'],
             'apellidos' => [''],
+            'image' => [''],
             'email' => ['required'],
             'password' => [''],
             'password_confirmation' => [''],
@@ -36,6 +37,13 @@ class UpdateUserRequest extends FormRequest
             'estado' => [''],
             'tipoc' => ['required'],
             'tipoe' => ['required'],
+            'latitud' => [''],
+            'longitud' => [''],
+            'id_ruta' => [''],
+            'licencia' => [''],
+            'cargo' => [''],
+            'sueldo' => [''],
+            'descripcion' => [''],
         ];
     }
 }

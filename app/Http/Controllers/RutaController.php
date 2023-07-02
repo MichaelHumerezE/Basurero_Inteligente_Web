@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ruta;
 use App\Http\Requests\StoreRutaRequest;
 use App\Http\Requests\UpdateRutaRequest;
+use App\Models\AreaCritica;
+use App\Models\Distrito;
 use App\Models\Horario;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -41,7 +43,8 @@ class RutaController extends Controller
     {
         $puntos = [];
         $horarios = Horario::get();
-        return view('rutas.create', compact('horarios', 'puntos'));
+        $distritos = Distrito::get();
+        return view('rutas.create', compact('horarios', 'puntos', 'distritos'));
     }
 
     /**
@@ -69,7 +72,8 @@ class RutaController extends Controller
         $origen = json_decode($ruta->origen);
         $destino = json_decode($ruta->destino);
         $horarios = Horario::get();
-        return view('rutas.show', compact('ruta', 'puntos', 'origen', 'destino', 'horarios'));
+        $distritos = Distrito::get();
+        return view('rutas.show', compact('ruta', 'puntos', 'origen', 'destino', 'horarios', 'distritos'));
     }
 
     /**
@@ -80,7 +84,14 @@ class RutaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ruta = ruta::where('id', '=', $id)->firstOrFail();
+        $puntos = json_decode($ruta->coordenadas);
+        $origen = json_decode($ruta->origen);
+        $destino = json_decode($ruta->destino);
+        $horarios = Horario::get();
+        $areasCriticas = AreaCritica::where('id_ruta', $ruta->id)->get();
+        $distritos = Distrito::get();
+        return view('rutas.edit', compact('ruta', 'puntos', 'origen', 'destino', 'horarios', 'areasCriticas', 'distritos'));
     }
 
     /**

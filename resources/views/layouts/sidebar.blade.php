@@ -38,6 +38,18 @@
                         </li>
                     </ul>
                 </li>
+                <li class="{{ 'zonas' == Request::is('zonas*') ? 'active' : '' }}">
+                    <a href="{{ url('/zonas') }}">
+                        <i class="fas fa-chart-pie"></i>
+                        <b> Zonas</b>
+                    </a>
+                </li>
+                <li class="{{ 'distritos' == Request::is('distritos*') ? 'active' : '' }}">
+                    <a href="{{ url('/distritos') }}">
+                        <i class="fas fa-globe"></i>
+                        <b> Distritos</b>
+                    </a>
+                </li>
                 <li class="{{ 'horarios' == Request::is('horarios*') ? 'active' : '' }}">
                     <a href="{{ url('/horarios') }}">
                         <i class="fas fa-clock"></i>
@@ -48,6 +60,12 @@
                     <a href="{{ url('/rutas') }}">
                         <i class="fas fa-road"></i>
                         <b> Rutas</b>
+                    </a>
+                </li>
+                <li class="{{ 'areasCriticas' == Request::is('areasCriticas*') ? 'active' : '' }}">
+                    <a href="{{ url('/areasCriticas') }}">
+                        <i class="fas fa-map"></i>
+                        <b> Areas Críticas</b>
                     </a>
                 </li>
                 <li>

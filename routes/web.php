@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AreaCriticaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\EmpleadoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\RutaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ZonaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +53,7 @@ Route::group(['middleware'=>['auth']], function(){
     route::resource('/roles', RolController::class);
     route::resource('/horarios', HorarioController::class);
     route::resource('/rutas', RutaController::class);
+    route::resource('/areasCriticas', AreaCriticaController::class);
+    route::resource('/distritos', DistritoController::class);
+    route::resource('/zonas', ZonaController::class);
 });

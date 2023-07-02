@@ -29,7 +29,8 @@ class StoreRutaRequest extends FormRequest
             'coordenadas' => 'required',
             'id_horario' => 'required',
             'origen' => '',
-            'destino' => ''
+            'destino' => '',
+            'id_distrito' => 'required',
         ];
     }
 }

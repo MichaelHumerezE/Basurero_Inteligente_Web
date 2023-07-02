@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $this->call(ZonaSeeder::class);
+        $this->call(DistritoSeeder::class);
         $this->call(HorarioSeeder::class);
         $this->call(RutaSeeder::class);
         $this->call(PermissionSeeder::class);
