@@ -25,6 +25,7 @@ class UpdateRutaRequest extends FormRequest
     {
         return [
             'nombre' => 'required',
+            'descripcion' => '',
             'coordenadas' => 'required',
             'id_horario' => 'required',
             'origen' => '',
