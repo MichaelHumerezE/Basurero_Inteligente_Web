@@ -2,7 +2,7 @@
 @section('content')
     <div class="card mt-4">
         <div class="card-header d-inline-flex">
-            <h1>Formulario - Editar Rutas</h1>
+            <h1>Formulario - Areas Criticas de la Ruta</h1>
         </div>
         <div class="card-header d-inline-flex">
             <a href="{{ route('rutas.index') }}" class="btn btn-primary ml-auto">

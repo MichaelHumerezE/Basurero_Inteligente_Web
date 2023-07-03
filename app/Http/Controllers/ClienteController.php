@@ -27,16 +27,16 @@ class ClienteController extends Controller
      */
     public function index(Request $request)
     {
-        $clientes = User::select('*')->orderBy('id','ASC')->where('tipoc','=',1);
-        $limit = (isset($request->limit)) ? $request->limit:10;
-        if(isset($request->search)){
-            $clientes = $clientes->where('id','like','%'.$request->search.'%')
-            ->orWhere('name','like','%'.$request->search.'%')
-            ->orWhere('apellidos','like','%'.$request->search.'%')
-            ->orWhere('email','like','%'.$request->search.'%')
-            ->orWhere('ci','like','%'.$request->search.'%')
-            ->orWhere('sexo','like','%'.$request->search.'%')
-            ->orWhere('phone','like','%'.$request->search.'%');
+        $clientes = User::select('*')->orderBy('id', 'ASC')->where('tipoc', '=', 1);
+        $limit = (isset($request->limit)) ? $request->limit : 10;
+        if (isset($request->search)) {
+            $clientes = $clientes->where('id', 'like', '%' . $request->search . '%')
+                ->orWhere('name', 'like', '%' . $request->search . '%')
+                ->orWhere('apellidos', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('ci', 'like', '%' . $request->search . '%')
+                ->orWhere('sexo', 'like', '%' . $request->search . '%')
+                ->orWhere('phone', 'like', '%' . $request->search . '%');
         }
         $clientes = $clientes->paginate($limit)->appends($request->all());
         return view('clientes.index', compact('clientes'));
@@ -61,7 +61,22 @@ class ClienteController extends Controller
      */
     public function store(RegisterRequest $request)
     {
-        User::create($request->validated());
+        $user = User::create($request->validated());
+        if ($request->hasFile('image')) {
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Clientes/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $user->image = $firebase_storage_path . $file;
+            $user->save();
+        }
         return redirect()->route('clientes.index')->with('mensaje', 'cliente Agregado Con Éxito');
     }
 
@@ -75,7 +90,14 @@ class ClienteController extends Controller
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
         $rutas = Ruta::get();
-        return view('clientes.show', compact('cliente', 'rutas'));
+        $expiresAt = new \DateTime('tomorrow');
+        $imageReference = app('firebase.storage')->getBucket()->object($cliente->image);
+        if ($imageReference->exists()) {
+            $image = $imageReference->signedUrl($expiresAt);
+        } else {
+            $image = null;
+        }
+        return view('clientes.show', compact('cliente', 'rutas', 'image'));
     }
 
     /**
@@ -88,7 +110,14 @@ class ClienteController extends Controller
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
         $rutas = Ruta::get();
-        return view('clientes.edit', compact('cliente', 'rutas'));
+        $expiresAt = new \DateTime('tomorrow');
+        $imageReference = app('firebase.storage')->getBucket()->object($cliente->image);
+        if ($imageReference->exists()) {
+            $image = $imageReference->signedUrl($expiresAt);
+        } else {
+            $image = null;
+        }
+        return view('clientes.edit', compact('cliente', 'rutas', 'image'));
     }
 
     /**
@@ -101,7 +130,27 @@ class ClienteController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $cliente = User::find($id);
+        $antImg = $cliente->image;
         $cliente->update($request->validated());
+        if ($request->hasFile('image')) {
+            if ($antImg != null) {
+                app('firebase.storage')->getBucket()->object($antImg)->delete();
+            }
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Clientes/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $cliente->image = $firebase_storage_path . $file;
+            $cliente->save();
+        }
         return redirect()->route('clientes.index')->with('message', 'Se ha actualizado los datos correctamente.');
     }
 
@@ -114,10 +163,12 @@ class ClienteController extends Controller
     public function destroy($id)
     {
         $cliente = User::findOrFail($id);
-        try{
+        try {
+            $image = $cliente->image;
             $cliente->delete();
+            app('firebase.storage')->getBucket()->object($image)->delete();
             return redirect()->route('clientes.index')->with('message', 'Se han borrado los datos correctamente.');
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             return redirect()->route('clientes.index')->with('danger', 'Datos relacionados, imposible borrar dato.');
         }
     }

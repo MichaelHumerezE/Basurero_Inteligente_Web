@@ -16,6 +16,11 @@
     </div>
     <div class="col-12">
         <div class="form-floating">
+            @if (isset($empleado->image))
+                <br>
+                <br>
+                <img src="{{ $image }}" class="img-fluid" alt="Responsive image" width="150">
+            @endif
             <input type="file" placeholder="image" class="form-control" name="image"
                 value="{{ isset($empleado) ? $empleado->image : old('image') }}">
             <label>Imagen</label>
@@ -130,7 +135,9 @@
             <!--
                 {!! Form::select('roles[]', $roles, $empRole, ['class' => 'form-control']) !!}
                 -->
-            {!! Form::select('roles[]', array_merge(['' => 'Elegir un Rol...'], $roles), $empRole, ['class' => 'form-control']) !!}
+            {!! Form::select('roles[]', array_merge(['' => 'Elegir un Rol...'], $roles), $empRole, [
+                'class' => 'form-control',
+            ]) !!}
         </div>
     </div>
 </div>

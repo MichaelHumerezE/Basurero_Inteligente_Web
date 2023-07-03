@@ -7,11 +7,12 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\StoreEmpleadoRequest;
 use App\Http\Requests\UpdateEmpleadoRequest;
-use App\Http\Requests\UpdateEmpresaRequest;
-use App\Http\Requests\UpdateUserRequest;
+use Kreait\Firebase\Auth as FirebaseAuth;
+use Kreait\Firebase\Auth\SignInResult\SignInResult;
+use Kreait\Firebase\Exception\FirebaseException;
+use Google\Cloud\Firestore\FirestoreClient;
 
 class EmpleadoController extends Controller
 {
@@ -71,6 +72,21 @@ class EmpleadoController extends Controller
         //$this->validate($request, ['roles' => 'required']);
         $user = User::create($request->validated());
         $user->assignRole($request->input('roles'));
+        if ($request->hasFile('image')) {
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Empleados/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $user->image = $firebase_storage_path . $file;
+            $user->save();
+        }
         return redirect()->route('empleados.index')->with('mensaje', 'Empleado Agregado Con Éxito');
     }
 
@@ -85,7 +101,14 @@ class EmpleadoController extends Controller
         $empleado = User::where('id', '=', $id)->firstOrFail();
         $roles = Role::pluck('name', 'name')->all();
         $empRole = $empleado->roles->pluck('name', 'name')->all();
-        return view('empleados.show', compact('empleado', 'roles', 'empRole'));
+        $expiresAt = new \DateTime('tomorrow');
+        $imageReference = app('firebase.storage')->getBucket()->object($empleado->image);
+        if ($imageReference->exists()) {
+            $image = $imageReference->signedUrl($expiresAt);
+        } else {
+            $image = null;
+        }
+        return view('empleados.show', compact('empleado', 'roles', 'empRole', 'image'));
     }
 
     /**
@@ -99,7 +122,14 @@ class EmpleadoController extends Controller
         $empleado = User::where('id', '=', $id)->firstOrFail();
         $roles = Role::pluck('name', 'name')->all();
         $empRole = $empleado->roles->pluck('name', 'name')->all();
-        return view('empleados.edit', compact('empleado', 'roles', 'empRole'));
+        $expiresAt = new \DateTime('tomorrow');
+        $imageReference = app('firebase.storage')->getBucket()->object($empleado->image);
+        if ($imageReference->exists()) {
+            $image = $imageReference->signedUrl($expiresAt);
+        } else {
+            $image = null;
+        }
+        return view('empleados.edit', compact('empleado', 'roles', 'empRole', 'image'));
     }
 
     /**
@@ -113,9 +143,29 @@ class EmpleadoController extends Controller
     {
         $this->validate($request, ['roles' => 'required']);
         $empleado = User::find($id);
+        $antImg = $empleado->image;
         $empleado->update($request->validated());
         DB::table('model_has_roles')->where('model_id', $id)->delete();
         $empleado->assignRole($request->input('roles'));
+        if ($request->hasFile('image')) {
+            if ($antImg != null){
+                app('firebase.storage')->getBucket()->object($antImg)->delete();
+            }
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Empleados/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $empleado->image = $firebase_storage_path . $file;
+            $empleado->save();
+        }
         return redirect()->route('empleados.index')->with('message', 'Se ha actualizado los datos correctamente.');
     }
 
@@ -129,7 +179,9 @@ class EmpleadoController extends Controller
     {
         $empleado = User::findOrFail($id);
         try {
+            $image = $empleado->image;
             $empleado->delete();
+            app('firebase.storage')->getBucket()->object($image)->delete();
             return redirect()->route('empleados.index')->with('message', 'Se han borrado los datos correctamente.');
         } catch (QueryException $e) {
             return redirect()->route('empleados.index')->with('danger', 'Datos relacionados con otras tablas, imposible borrar datos.');
