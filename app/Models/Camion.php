@@ -12,6 +12,7 @@ class Camion extends Model
     protected $fillable = [
         'nombre',
         'placa',
+        'image',
         'capacidad_personal',
         'capacidad_carga',
     ];

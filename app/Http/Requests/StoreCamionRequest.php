@@ -13,7 +13,7 @@ class StoreCamionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class StoreCamionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nombre' => 'required',
+            'placa' => 'required',
+            'image' => '',
+            'capacidad_personal' => 'required',
+            'capacidad_carga' => 'required',
         ];
     }
 }

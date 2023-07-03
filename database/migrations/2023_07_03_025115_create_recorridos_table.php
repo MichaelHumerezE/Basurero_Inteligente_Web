@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('camions', function (Blueprint $table) {
+        Schema::create('recorridos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('image')->nullable();
-            $table->string('placa')->unique();
-            $table->unsignedMediumInteger('capacidad_personal');
-            $table->unsignedMediumInteger('capacidad_carga');
+            $table->dateTime('fechaHora');
+            $table->time('horaIni');
+            $table->time('horaFin');
+            $table->text('coordenadas');
+            $table->unsignedBigInteger('id_equipoRecorrido');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('camions');
+        Schema::dropIfExists('recorridos');
     }
 };

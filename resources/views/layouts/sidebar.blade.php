@@ -68,6 +68,18 @@
                         <b> Areas Críticas</b>
                     </a>
                 </li>
+                <li class="{{ 'equiposRecorridos' == Request::is('equiposRecorridos*') ? 'active' : '' }}">
+                    <a href="{{ url('/equiposRecorridos') }}">
+                        <i class="fas fa-user-plus"></i>
+                        <b> Equipos Recorridos</b>
+                    </a>
+                </li>
+                <li class="{{ 'recorridos' == Request::is('recorridos*') ? 'active' : '' }}">
+                    <a href="{{ url('/recorridos') }}">
+                        <i class="fa fa-list"></i>
+                        <b> Recorridos</b>
+                    </a>
+                </li>
                 <li class="{{ 'alarmas' == Request::is('alarmas*') ? 'active' : '' }}">
                     <a href="{{ url('/alarmas') }}">
                         <i class="fas fa-bell"></i>

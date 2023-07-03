@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Basura extends Model
+class Recorrido extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'tipo',
+        'fechaHora',
+        'horaIni',
+        'horaFin',
+        'coordenadas',
+        'id_equipoRecorrido',
     ];
 }

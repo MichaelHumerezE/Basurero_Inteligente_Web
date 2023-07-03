@@ -13,7 +13,7 @@ class StoreBasuraRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreBasuraRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'tipo' => 'required',
         ];
     }
 }
