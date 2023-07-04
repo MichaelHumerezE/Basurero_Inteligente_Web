@@ -16,14 +16,18 @@ class AuthController extends Controller
         $attrs = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:6|confirmed',
+            'tipoc' => '',
+            'tipoe' => '',
         ]);
 
         //create user
         $user = User::create([
             'name' => $attrs['name'],
             'email' => $attrs['email'],
-            'password' => bcrypt($attrs['password'])
+            'password' => bcrypt($attrs['password']),
+            'tipoe' => $attrs['tipoe'],
+            'tipoc' => $attrs['tipoc'],
         ]);
 
         //return user & token in response
@@ -63,6 +67,34 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
         return response([
             'message' => 'Logout success.'
+        ], 200);
+    }
+
+    // get user details
+    public function user()
+    {
+        return response([
+            'user' => auth()->user()
+        ], 200);
+    }
+
+    // update user
+    public function update(Request $request)
+    {
+        $attrs = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        //$image = $this->saveImage($request->image, 'profiles');
+
+        auth()->user()->update([
+            'name' => $attrs['name'],
+            //'image' => $image
+        ]);
+
+        return response([
+            'message' => 'User updated.',
+            'user' => auth()->user()
         ], 200);
     }
 }

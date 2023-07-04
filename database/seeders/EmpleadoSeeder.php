@@ -25,50 +25,189 @@ class EmpleadoSeeder extends Seeder
             'phone' => '60522212',
             'domicilio' => 'Santa Cruz',
             'estado' => '1',
+            'sueldo' => '3000',
             'tipoc' => '0',
             'tipoe' => '1',
         ])->assignRole('Administrador');
 
         User::create([
             'name' => 'Michael',
-            'apellidos' => 'Humerez Estepo',
-            'email' => 'a@gmail.com',
+            'apellidos' => 'Humerez',
+            'email' => 'Michael@gmail.com',
             'password' => '123456',
             'ci' => '9866024',
             'sexo' => 'M',
             'phone' => '60522214',
             'domicilio' => 'Santa Cruz',
             'estado' => '1',
+            'sueldo' => '3000',
             'tipoc' => '0',
             'tipoe' => '1',
         ])->assignRole('Administrador');
-        
+
         User::create([
             'name' => 'Brayan',
-            'apellidos' => '',
-            'email' => 'b@gmail.com',
+            'apellidos' => 'Myers',
+            'email' => 'Brayan@gmail.com',
             'password' => '123456',
             'ci' => '9866022',
             'sexo' => 'M',
             'phone' => '60522211',
             'domicilio' => 'Santa Cruz',
             'estado' => '1',
+            'sueldo' => '2500',
             'tipoc' => '0',
             'tipoe' => '1',
-        ])->assignRole('Administrador');
+        ])->assignRole('Conductor');
 
         User::create([
             'name' => 'Camilo',
-            'apellidos' => '',
-            'email' => 'c@gmail.com',
+            'apellidos' => 'Waller',
+            'email' => 'Camilo@gmail.com',
             'password' => '123456',
             'ci' => '9866023',
             'sexo' => 'M',
             'phone' => '60522213',
             'domicilio' => 'Santa Cruz',
-            'estado' => '0',
+            'estado' => '1',
+            'sueldo' => '2500',
             'tipoc' => '0',
             'tipoe' => '1',
-        ]);
+        ])->assignRole('Conductor');
+
+        User::create([
+            'name' => 'Kane',
+            'apellidos' => 'Grimes',
+            'email' => 'Kane@gmail.com',
+            'password' => '123456',
+            'ci' => '1247635',
+            'sexo' => 'M',
+            'phone' => '70055574',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Conductor');
+
+        User::create([
+            'name' => 'Reese',
+            'apellidos' => 'Horn',
+            'email' => 'Reese@gmail.com',
+            'password' => '123456',
+            'ci' => '6533104',
+            'sexo' => 'M',
+            'phone' => '63344472',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Recogedor');
+
+        User::create([
+            'name' => 'Noah',
+            'apellidos' => 'Conner',
+            'email' => 'Noah@gmail.com',
+            'password' => '123456',
+            'ci' => '5844214',
+            'sexo' => 'M',
+            'phone' => '71455620',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Recogedor');
+
+        User::create([
+            'name' => 'Dylan',
+            'apellidos' => 'Allen',
+            'email' => 'Dylan@gmail.com',
+            'password' => '123456',
+            'ci' => '6527194',
+            'sexo' => 'M',
+            'phone' => '65798924',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Recogedor');
+
+        User::create([
+            'name' => 'Ryan',
+            'apellidos' => 'Blevins',
+            'email' => 'Ryan@gmail.com',
+            'password' => '123456',
+            'ci' => '6570030',
+            'sexo' => 'M',
+            'phone' => '60012300',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Recogedor');
+
+        User::create([
+            'name' => 'Jerome',
+            'apellidos' => 'Miranda',
+            'email' => 'Jerome@gmail.com',
+            'password' => '123456',
+            'ci' => '9617000',
+            'sexo' => 'M',
+            'phone' => '70001201',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2500',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Recogedor');
+
+        User::create([
+            'name' => 'Jaime',
+            'apellidos' => 'Booner',
+            'email' => 'Jaime@gmail.com',
+            'password' => '123456',
+            'ci' => '5524101',
+            'sexo' => 'M',
+            'phone' => '76421325',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2100',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Ayudante');
+
+        User::create([
+            'name' => 'Tobias',
+            'apellidos' => 'Perry',
+            'email' => 'Tobias@gmail.com',
+            'password' => '123456',
+            'ci' => '4756147',
+            'sexo' => 'M',
+            'phone' => '74520014',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2100',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Ayudante');
+
+        User::create([
+            'name' => 'Scott',
+            'apellidos' => 'Dickerson',
+            'email' => 'Scott@gmail.com',
+            'password' => '123456',
+            'ci' => '6584201',
+            'sexo' => 'M',
+            'phone' => '63001241',
+            'domicilio' => 'Santa Cruz',
+            'estado' => '1',
+            'sueldo' => '2100',
+            'tipoc' => '0',
+            'tipoe' => '1',
+        ])->assignRole('Ayudante');
     }
 }
