@@ -18,9 +18,7 @@ return new class extends Migration
             $table->datetime('fechaHora');
             $table->double('cantidad');
             $table->unsignedBigInteger('id_basura');
-            $table->unsignedBigInteger('id_ruta');
             $table->foreign('id_basura')->references('id')->on('basuras')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_ruta')->references('id')->on('rutas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

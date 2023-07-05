@@ -29,6 +29,7 @@ class StoreRecorridoRequest extends FormRequest
             'horaFin' => 'required',
             'coordenadas' => 'required',
             'id_equipoRecorrido' => 'required',
+            'id_ruta' => 'required',
         ];
     }
 }

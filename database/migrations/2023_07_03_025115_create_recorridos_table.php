@@ -20,6 +20,8 @@ return new class extends Migration
             $table->time('horaFin');
             $table->text('coordenadas');
             $table->unsignedBigInteger('id_equipoRecorrido');
+            $table->unsignedBigInteger('id_ruta');
+            $table->foreign('id_ruta')->references('id')->on('rutas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

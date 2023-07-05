@@ -13,6 +13,5 @@ class Recepcion extends Model
         'fecha',
         'cantidad',
         'id_basura',
-        'id_ruta',
     ];
 }

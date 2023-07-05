@@ -15,5 +15,6 @@ class Recorrido extends Model
         'horaFin',
         'coordenadas',
         'id_equipoRecorrido',
+        'id_ruta',
     ];
 }
