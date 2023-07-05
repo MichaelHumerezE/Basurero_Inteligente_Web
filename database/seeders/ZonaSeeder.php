@@ -18,5 +18,8 @@ class ZonaSeeder extends Seeder
         Zona::create([
             'nombre' => 'Zona A'
         ]);
+        Zona::create([
+            'nombre' => 'Zona B'
+        ]);
     }
 }

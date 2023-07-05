@@ -23,11 +23,13 @@ class DatabaseSeeder extends Seeder
         $this->call(ZonaSeeder::class);
         $this->call(DistritoSeeder::class);
         $this->call(HorarioSeeder::class);
+        $this->call(RedSeeder::class);
         $this->call(RutaSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(EmpleadoSeeder::class);
         $this->call(ClienteSeeder::class);
         $this->call(CamionSeeder::class);
+        $this->call(BasuraSeeder::class);
     }
 }
