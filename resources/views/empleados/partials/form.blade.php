@@ -19,7 +19,7 @@
             @if (isset($empleado->image))
                 <br>
                 <br>
-                <img src="{{ $image }}" class="img-fluid" alt="Responsive image" width="150">
+                <img src="{{ $empleado->image }}" class="img-fluid" alt="Responsive image" width="150">
             @endif
             <input type="file" placeholder="image" class="form-control" name="image"
                 value="{{ isset($empleado) ? $empleado->image : old('image') }}">

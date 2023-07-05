@@ -28,6 +28,7 @@ class StoreEmpleadoRequest extends FormRequest
             'apellidos' => [''],
             'image' => [''],
             'email' => ['required', 'unique:users,email'],
+            'carpeta' => '',
             'password' => ['required', 'min:6'],
             'password_confirmation' => ['required', 'same:password'],
             'ci' => ['required', 'unique:users,ci'],

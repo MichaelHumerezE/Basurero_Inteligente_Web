@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required'],
             'apellidos' => [''],
             'image' => [''],
+            'carpeta' => '',
             'email' => ['required', 'unique:users,email'],
             'password' => ['required', 'min:6'],
             'password_confirmation' => ['required', 'same:password'],

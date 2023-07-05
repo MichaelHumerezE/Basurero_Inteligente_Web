@@ -27,6 +27,7 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required'],
             'apellidos' => [''],
             'image' => [''],
+            'carpeta' => '',
             'email' => ['required'],
             'password' => [''],
             'password_confirmation' => [''],

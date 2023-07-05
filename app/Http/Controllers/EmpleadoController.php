@@ -84,7 +84,13 @@ class EmpleadoController extends Controller
                 // Se elimina el archivo del directorio local de Laravel
                 unlink($localfolder . $file);
             }
-            $user->image = $firebase_storage_path . $file;
+            $user->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($user->carpeta);
+            if ($imageReference->exists()) {
+                $user->image = $imageReference->signedUrl($expiresAt);
+            }
             $user->save();
         }
         return redirect()->route('empleados.index')->with('mensaje', 'Empleado Agregado Con Éxito');
@@ -101,14 +107,18 @@ class EmpleadoController extends Controller
         $empleado = User::where('id', '=', $id)->firstOrFail();
         $roles = Role::pluck('name', 'name')->all();
         $empRole = $empleado->roles->pluck('name', 'name')->all();
-        $expiresAt = new \DateTime('tomorrow');
-        $imageReference = app('firebase.storage')->getBucket()->object($empleado->image);
-        if ($imageReference->exists()) {
-            $image = $imageReference->signedUrl($expiresAt);
-        } else {
-            $image = null;
-        }
-        return view('empleados.show', compact('empleado', 'roles', 'empRole', 'image'));
+        /*$image = '';
+        //if ($empleado->image != null) {
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($empleado->carpeta);
+            if ($imageReference->exists()) {
+                $image = $imageReference->signedUrl($expiresAt);
+            } else {
+                $image = null;
+            }
+            dd($image);
+        //}*/
+        return view('empleados.show', compact('empleado', 'roles', 'empRole'));
     }
 
     /**
@@ -122,14 +132,18 @@ class EmpleadoController extends Controller
         $empleado = User::where('id', '=', $id)->firstOrFail();
         $roles = Role::pluck('name', 'name')->all();
         $empRole = $empleado->roles->pluck('name', 'name')->all();
-        $expiresAt = new \DateTime('tomorrow');
-        $imageReference = app('firebase.storage')->getBucket()->object($empleado->image);
-        if ($imageReference->exists()) {
-            $image = $imageReference->signedUrl($expiresAt);
-        } else {
-            $image = null;
-        }
-        return view('empleados.edit', compact('empleado', 'roles', 'empRole', 'image'));
+        /*$image = '';
+        if ($empleado->image != null && $empleado->image != '') {
+            $expiresAt = new \DateTime('tomorrow');
+            $imageReference = app('firebase.storage')->getBucket()->object($empleado->image);
+            if ($imageReference->exists()) {
+                $image = $imageReference->signedUrl($expiresAt);
+            } else {
+                $image = null;
+            }
+            dd($image);
+        }*/
+        return view('empleados.edit', compact('empleado', 'roles', 'empRole'));
     }
 
     /**
@@ -143,12 +157,12 @@ class EmpleadoController extends Controller
     {
         $this->validate($request, ['roles' => 'required']);
         $empleado = User::find($id);
-        $antImg = $empleado->image;
+        $antImg = $empleado->carpeta;
         $empleado->update($request->validated());
         DB::table('model_has_roles')->where('model_id', $id)->delete();
         $empleado->assignRole($request->input('roles'));
         if ($request->hasFile('image')) {
-            if ($antImg != null){
+            if ($antImg != null) {
                 app('firebase.storage')->getBucket()->object($antImg)->delete();
             }
             $image = $request->file('image'); //image file from frontend
@@ -163,7 +177,13 @@ class EmpleadoController extends Controller
                 // Se elimina el archivo del directorio local de Laravel
                 unlink($localfolder . $file);
             }
-            $empleado->image = $firebase_storage_path . $file;
+            $empleado->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($empleado->carpeta);
+            if ($imageReference->exists()) {
+                $empleado->image = $imageReference->signedUrl($expiresAt);
+            }
             $empleado->save();
         }
         return redirect()->route('empleados.index')->with('message', 'Se ha actualizado los datos correctamente.');
