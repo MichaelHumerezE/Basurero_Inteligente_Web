@@ -12,7 +12,13 @@
 <div class="row">
     <div class="col-12">
         <div class="form-floating">
-            <input type="file" class="form-control" name="imagen" accept="image/*">
+            @if (isset($camion->image))
+                <br>
+                <br>
+                <img src="{{ $camion->image }}" class="img-fluid" alt="Responsive image" width="150">
+            @endif
+            <input type="file" placeholder="image" class="form-control" name="image"
+                value="{{ isset($camion) ? $camion->image : old('image') }}">
             <label>Imagen</label>
         </div>
     </div>

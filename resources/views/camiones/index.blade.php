@@ -56,6 +56,7 @@
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
+                            <th>Foto</th>
                             <th>Placa</th>
                             <th>Capacidad Personal</th>
                             <th>Capacidad Carga</th>
@@ -74,6 +75,7 @@
                         <tr>
                             <th scope="row">{{ $valor++ }}</th>
                             <td>{{ $camion->nombre }}</td>
+                            <th><img src="{{ $camion->image }}" class="img-fluid" alt="Responsive image" width="150"></th>
                             <td>{{ $camion->placa }}</td>
                             <td>{{ $camion->capacidad_personal }}</td>
                             <td>{{ $camion->capacidad_carga }} Kgs</td>

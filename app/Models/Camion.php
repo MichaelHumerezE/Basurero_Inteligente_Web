@@ -13,6 +13,7 @@ class Camion extends Model
         'nombre',
         'placa',
         'image',
+        'carpeta',
         'capacidad_personal',
         'capacidad_carga',
     ];

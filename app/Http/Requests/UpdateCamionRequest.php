@@ -27,6 +27,7 @@ class UpdateCamionRequest extends FormRequest
             'nombre' => 'required',
             'placa' => 'required',
             'image' => '',
+            'carpeta' => '',
             'capacidad_personal' => 'required',
             'capacidad_carga' => 'required',
         ];

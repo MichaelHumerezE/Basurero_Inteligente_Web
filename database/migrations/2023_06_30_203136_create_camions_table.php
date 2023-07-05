@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('camions', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('image')->nullable();
+            $table->text('image')->nullable();
+            $table->string('carpeta')->nullable();
             $table->string('placa')->unique();
             $table->unsignedMediumInteger('capacidad_personal');
             $table->unsignedMediumInteger('capacidad_carga');

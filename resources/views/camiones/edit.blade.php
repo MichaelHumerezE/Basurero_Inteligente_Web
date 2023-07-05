@@ -10,7 +10,8 @@
                 Volver</a>
         </div>
         <div class="card-body">
-            <form action="{{ route('camiones.update', $camion->id) }}" method="POST" enctype="multipart/form-data" id="update">
+            <form action="{{ route('camiones.update', $camion->id) }}" method="POST" enctype="multipart/form-data"
+                id="update">
                 @method('PUT')
                 @csrf
                 <div class="row">
@@ -34,7 +35,13 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-floating">
-                            <input type="file" class="form-control" name="imagen">
+                            @if (isset($camion->image))
+                                <br>
+                                <br>
+                                <img src="{{ $camion->image }}" class="img-fluid" alt="Responsive image" width="150">
+                            @endif
+                            <input type="file" placeholder="image" class="form-control" name="image"
+                                value="{{ isset($camion) ? $camion->image : old('image') }}">
                             <label>Imagen</label>
                         </div>
                     </div>
@@ -42,7 +49,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-floating">
-                            <input type="number" placeholder="capacidad_personal" class="form-control" name="capacidad_personal"
+                            <input type="number" placeholder="capacidad_personal" class="form-control"
+                                name="capacidad_personal"
                                 value="{{ isset($camion) ? $camion->capacidad_personal : old('capacidad_personal') }}">
                             <label>Capacidad de Personal</label>
                         </div>

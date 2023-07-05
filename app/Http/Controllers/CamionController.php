@@ -51,7 +51,28 @@ class CamionController extends Controller
      */
     public function store(StoreCamionRequest $request)
     {
-        Camion::create($request->validated());
+        $camion =  Camion::create($request->validated());
+        if ($request->hasFile('image')) {
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Vehiculos/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $camion->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($camion->carpeta);
+            if ($imageReference->exists()) {
+                $camion->image = $imageReference->signedUrl($expiresAt);
+            }
+            $camion->save();
+        }
         return redirect()->route('camiones.index')->with('mensaje', 'Camión agregado con éxito');
     }
 
@@ -89,7 +110,33 @@ class CamionController extends Controller
     public function update(UpdateCamionRequest $request, $id)
     {
         $camion = Camion::findOrFail($id);
+        $antImg = $camion->carpeta;
         $camion->update($request->validated());
+        if ($request->hasFile('image')) {
+            if ($antImg != null) {
+                app('firebase.storage')->getBucket()->object($antImg)->delete();
+            }
+            $image = $request->file('image'); //image file from frontend
+            $firebase_storage_path = 'Vehiculos/';
+            $localfolder = public_path('firebase-temp-uploads') . '/';
+            $extension = $image->getClientOriginalExtension();
+            $file = time() . '.' . $extension;
+
+            if ($image->move($localfolder, $file)) {
+                $uploadedfile = fopen($localfolder . $file, 'r');
+                app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+                // Se elimina el archivo del directorio local de Laravel
+                unlink($localfolder . $file);
+            }
+            $camion->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($camion->carpeta);
+            if ($imageReference->exists()) {
+                $camion->image = $imageReference->signedUrl($expiresAt);
+            }
+            $camion->save();
+        }
         return redirect()->route('camiones.index')->with('message', 'Los datos se han actualizado correctamente.');
     }
 
@@ -103,7 +150,9 @@ class CamionController extends Controller
     {
         $camion = Camion::findOrFail($id);
         try {
+            $carpeta = $camion->carpeta;
             $camion->delete();
+            app('firebase.storage')->getBucket()->object($carpeta)->delete();
             return redirect()->route('camiones.index')->with('message', 'Los datos se han borrado correctamente.');
         } catch (QueryException $e) {
             return redirect()->route('camiones.index')->with('message', 'Error al borrar los datos.');

@@ -199,9 +199,9 @@ class EmpleadoController extends Controller
     {
         $empleado = User::findOrFail($id);
         try {
-            $image = $empleado->image;
+            $carpeta = $empleado->carpeta;
             $empleado->delete();
-            app('firebase.storage')->getBucket()->object($image)->delete();
+            app('firebase.storage')->getBucket()->object($carpeta)->delete();
             return redirect()->route('empleados.index')->with('message', 'Se han borrado los datos correctamente.');
         } catch (QueryException $e) {
             return redirect()->route('empleados.index')->with('danger', 'Datos relacionados con otras tablas, imposible borrar datos.');

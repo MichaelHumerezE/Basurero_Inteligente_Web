@@ -55,12 +55,11 @@
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
-                            <th>Apellidos</th>
+                            <th>Foto</th>
                             <th>Email</th>
                             <th>CI</th>
                             <th>Sexo</th>
                             <th>Phone</th>
-                            <th>Domicilio</th>
                             <th>Estado</th>
                             <th>Rol</th>
                             <th>Acciones</th>
@@ -79,12 +78,11 @@
                                 <tr>
                                     <th scope="row">{{ $valor++ }}</th>
                                     <td>{{ $empleado->name }}</td>
-                                    <td>{{ $empleado->apellidos }}</td>
+                                    <td><img src="{{ $empleado->image }}" class="img-fluid" alt="Responsive image" width="150"></td>
                                     <td>{{ $empleado->email }}</td>
                                     <td>{{ $empleado->ci }}</td>
                                     <td>{{ $empleado->sexo }}</td>
                                     <td>{{ $empleado->phone }}</td>
-                                    <td>{{ $empleado->domicilio }}</td>
                                     @if ($empleado->estado = 1)
                                         <td>Activo</td>
                                     @else

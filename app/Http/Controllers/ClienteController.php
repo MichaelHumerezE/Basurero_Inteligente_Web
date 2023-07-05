@@ -64,7 +64,7 @@ class ClienteController extends Controller
         $user = User::create($request->validated());
         if ($request->hasFile('image')) {
             $image = $request->file('image'); //image file from frontend
-            $firebase_storage_path = 'Clientes/';
+            $firebase_storage_path = 'Empleados/';
             $localfolder = public_path('firebase-temp-uploads') . '/';
             $extension = $image->getClientOriginalExtension();
             $file = time() . '.' . $extension;
@@ -74,7 +74,13 @@ class ClienteController extends Controller
                 // Se elimina el archivo del directorio local de Laravel
                 unlink($localfolder . $file);
             }
-            $user->image = $firebase_storage_path . $file;
+            $user->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($user->carpeta);
+            if ($imageReference->exists()) {
+                $user->image = $imageReference->signedUrl($expiresAt);
+            }
             $user->save();
         }
         return redirect()->route('clientes.index')->with('mensaje', 'cliente Agregado Con Éxito');
@@ -90,14 +96,7 @@ class ClienteController extends Controller
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
         $rutas = Ruta::get();
-        $expiresAt = new \DateTime('tomorrow');
-        $imageReference = app('firebase.storage')->getBucket()->object($cliente->image);
-        if ($imageReference->exists()) {
-            $image = $imageReference->signedUrl($expiresAt);
-        } else {
-            $image = null;
-        }
-        return view('clientes.show', compact('cliente', 'rutas', 'image'));
+        return view('clientes.show', compact('cliente', 'rutas'));
     }
 
     /**
@@ -110,14 +109,7 @@ class ClienteController extends Controller
     {
         $cliente = User::where('id', '=', $id)->firstOrFail();
         $rutas = Ruta::get();
-        $expiresAt = new \DateTime('tomorrow');
-        $imageReference = app('firebase.storage')->getBucket()->object($cliente->image);
-        if ($imageReference->exists()) {
-            $image = $imageReference->signedUrl($expiresAt);
-        } else {
-            $image = null;
-        }
-        return view('clientes.edit', compact('cliente', 'rutas', 'image'));
+        return view('clientes.edit', compact('cliente', 'rutas'));
     }
 
     /**
@@ -137,7 +129,7 @@ class ClienteController extends Controller
                 app('firebase.storage')->getBucket()->object($antImg)->delete();
             }
             $image = $request->file('image'); //image file from frontend
-            $firebase_storage_path = 'Clientes/';
+            $firebase_storage_path = 'Empleados/';
             $localfolder = public_path('firebase-temp-uploads') . '/';
             $extension = $image->getClientOriginalExtension();
             $file = time() . '.' . $extension;
@@ -148,7 +140,13 @@ class ClienteController extends Controller
                 // Se elimina el archivo del directorio local de Laravel
                 unlink($localfolder . $file);
             }
-            $cliente->image = $firebase_storage_path . $file;
+            $cliente->carpeta = $firebase_storage_path . $file;
+            //URL
+            $expiresAt = new \DateTime('2023-07-15');
+            $imageReference = app('firebase.storage')->getBucket()->object($cliente->carpeta);
+            if ($imageReference->exists()) {
+                $cliente->image = $imageReference->signedUrl($expiresAt);
+            }
             $cliente->save();
         }
         return redirect()->route('clientes.index')->with('message', 'Se ha actualizado los datos correctamente.');

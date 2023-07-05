@@ -31,7 +31,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating">
-                        <input type="file" class="form-control" name="imagen" disabled>
+                        @if (isset($camion->image))
+                            <br>
+                            <br>
+                            <img src="{{ $camion->image }}" class="img-fluid" alt="Responsive image" width="150">
+                        @endif
+                        <input type="hidden" placeholder="image" class="form-control" name="image"
+                            value="{{ isset($camion) ? $camion->image : old('image') }}">
                         <label>Imagen</label>
                     </div>
                 </div>
@@ -39,7 +45,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-floating">
-                        <input type="number" placeholder="capacidad_personal" class="form-control" name="capacidad_personal"
+                        <input type="number" placeholder="capacidad_personal" class="form-control"
+                            name="capacidad_personal"
                             value="{{ isset($camion) ? $camion->capacidad_personal : old('capacidad_personal') }}" readonly>
                         <label>Capacidad de Personal</label>
                     </div>
