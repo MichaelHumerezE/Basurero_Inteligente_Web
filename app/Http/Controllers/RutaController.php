@@ -43,8 +43,7 @@ class RutaController extends Controller
     {
         $puntos = [];
         $horarios = Horario::get();
-        $distritos = Distrito::get();
-        return view('rutas.create', compact('horarios', 'puntos', 'distritos'));
+        return view('rutas.create', compact('horarios', 'puntos'));
     }
 
     /**
@@ -72,8 +71,7 @@ class RutaController extends Controller
         $origen = json_decode($ruta->origen);
         $destino = json_decode($ruta->destino);
         $horarios = Horario::get();
-        $distritos = Distrito::get();
-        return view('rutas.show', compact('ruta', 'puntos', 'origen', 'destino', 'horarios', 'distritos'));
+        return view('rutas.show', compact('ruta', 'puntos', 'origen', 'destino', 'horarios'));
     }
 
     /**
@@ -90,8 +88,7 @@ class RutaController extends Controller
         $destino = json_decode($ruta->destino);
         $horarios = Horario::get();
         $areasCriticas = AreaCritica::where('id_ruta', $ruta->id)->get();
-        $distritos = Distrito::get();
-        return view('rutas.edit', compact('ruta', 'puntos', 'origen', 'destino', 'horarios', 'areasCriticas', 'distritos'));
+        return view('rutas.edit', compact('ruta', 'puntos', 'origen', 'destino', 'horarios', 'areasCriticas'));
     }
 
     /**

@@ -30,21 +30,6 @@
         <br>
     </div>
     <div class="col-12">
-        <br>
-        <label>
-            <h5>Elegir un Distrito</h5>
-        </label>
-        <select name="id_distrito" class="form-control">
-            <option value=""> Seleccione Un Distrito... </option>
-            @foreach ($distritos as $distrito)
-                <option value="{{ $distrito->id }}" @if ((isset($ruta->id_distrito) ? $ruta->id_distrito : old('id_distrito')) == $distrito->id) selected @endif>
-                    {{ $distrito->nombre }}
-                </option>
-            @endforeach
-        </select>
-        <br>
-    </div>
-    <div class="col-12">
         <div class="form-floating">
             <input type="hidden" name="coordenadas" value="" id="coordenadas">
         </div>

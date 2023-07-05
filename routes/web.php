@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AlarmaController;
 use App\Http\Controllers\AreaCriticaController;
+use App\Http\Controllers\BasuraController;
+use App\Http\Controllers\CamionController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\EquipoRecorridoController;
+use App\Http\Controllers\EstablecimientoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
@@ -16,6 +19,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RecorridoController;
+use App\Http\Controllers\RedController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\RutaController;
 use App\Http\Controllers\UserController;
@@ -32,9 +36,7 @@ use App\Http\Controllers\ZonaController;
 |
 */
 
-Route::get('/', function () {
-    return view('inicio');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/register', [RegisterController::class, 'show']);
 
@@ -48,9 +50,9 @@ Route::get('/home', [HomeController::class, 'index']);
 
 Route::get('/logout', [LogoutController::class, 'logout']);
 
-Route::group(['middleware'=>['auth']], function(){
+Route::group(['middleware' => ['auth']], function () {
     route::resource('/empleados', EmpleadoController::class);
-    route::resource('/clientes', ClienteController::class); 
+    route::resource('/clientes', ClienteController::class);
     route::resource('/users', UserController::class);
     route::resource('/perfil', PerfilController::class);
     route::resource('/password', PasswordController::class);
@@ -64,4 +66,8 @@ Route::group(['middleware'=>['auth']], function(){
     route::resource('/reclamos', ReclamoController::class);
     route::resource('/equiposRecorridos', EquipoRecorridoController::class);
     route::resource('/recorridos', RecorridoController::class);
+    route::resource('/basuras', BasuraController::class);
+    route::resource('/camiones', CamionController::class);
+    route::resource('/redes', RedController::class);
+    route::resource('/establecimientos', EstablecimientoController::class);
 });

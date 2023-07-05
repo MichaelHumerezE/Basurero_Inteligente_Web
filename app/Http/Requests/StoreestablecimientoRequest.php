@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRutaRequest extends FormRequest
+class StoreestablecimientoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,9 @@ class StoreRutaRequest extends FormRequest
     {
         return [
             'nombre' => 'required',
-            'descripcion' => '',
-            'coordenadas' => 'required',
-            'id_horario' => 'required',
-            'origen' => '',
-            'destino' => '',
+            'id_ruta' => 'required',
+            'id_distrito' => 'required',
+            'id_red' => 'required',
         ];
     }
 }

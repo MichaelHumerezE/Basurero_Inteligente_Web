@@ -80,6 +80,30 @@
                         <b> Recorridos</b>
                     </a>
                 </li>
+                <li class="{{ 'basuras' == Request::is('basuras*') ? 'active' : '' }}">
+                    <a href="{{ url('/basuras') }}">
+                        <i class="fas fa-trash"></i>
+                        <b> Basuras</b>
+                    </a>
+                </li>
+                <li class="{{ 'camiones' == Request::is('camiones*') ? 'active' : '' }}">
+                    <a href="{{ url('/camiones') }}">
+                        <i class="fas fa-bus"></i>
+                        <b> Camiones</b>
+                    </a>
+                </li>
+                <li class="{{ 'redes' == Request::is('redes*') ? 'active' : '' }}">
+                    <a href="{{ url('/redes') }}">
+                        <i class="fas fa-hashtag"></i>
+                        <b> Redes</b>
+                    </a>
+                </li>
+                <li class="{{ 'establecimientos' == Request::is('establecimientos*') ? 'active' : '' }}">
+                    <a href="{{ url('/establecimientos') }}">
+                        <i class="fas fa-building"></i>
+                        <b> Establecimientos</b>
+                    </a>
+                </li>
                 <li class="{{ 'alarmas' == Request::is('alarmas*') ? 'active' : '' }}">
                     <a href="{{ url('/alarmas') }}">
                         <i class="fas fa-bell"></i>

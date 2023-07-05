@@ -21,9 +21,7 @@ return new class extends Migration
             $table->text('destino')->nullable();
             $table->text('coordenadas');// array(punto 1.00... ,21545)
             $table->unsignedBigInteger('id_horario');
-            $table->unsignedBigInteger('id_distrito');
             $table->foreign('id_horario')->references('id')->on('horarios')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_distrito')->references('id')->on('distritos')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

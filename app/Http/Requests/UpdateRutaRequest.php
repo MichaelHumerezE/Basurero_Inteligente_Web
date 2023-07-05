@@ -30,7 +30,6 @@ class UpdateRutaRequest extends FormRequest
             'id_horario' => 'required',
             'origen' => '',
             'destino' => '',
-            'id_distrito' => 'required',
         ];
     }
 }
