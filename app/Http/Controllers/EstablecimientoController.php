@@ -21,7 +21,6 @@ class EstablecimientoController extends Controller
      */
     public function index(Request $request)
     {
-        $establecimientos = establecimiento::select('*')->orderBy('id', 'ASC');
         $establecimientos = DB::table('establecimientos')
             ->join('rutas', 'establecimientos.id_ruta', '=', 'rutas.id')
             ->join('distritos', 'establecimientos.id_distrito', '=', 'distritos.id')

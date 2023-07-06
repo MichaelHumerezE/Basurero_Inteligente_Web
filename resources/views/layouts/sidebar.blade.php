@@ -104,6 +104,12 @@
                         <b> Establecimientos</b>
                     </a>
                 </li>
+                <li class="{{ 'recepciones' == Request::is('recepciones*') ? 'active' : '' }}">
+                    <a href="{{ url('/recepciones') }}">
+                        <i class="fas fa-file"></i>
+                        <b> Recepciones</b>
+                    </a>
+                </li>
                 <li class="{{ 'alarmas' == Request::is('alarmas*') ? 'active' : '' }}">
                     <a href="{{ url('/alarmas') }}">
                         <i class="fas fa-bell"></i>

@@ -56,14 +56,15 @@
     let markers = [];
 
     function initMap() {
-        if (navigator.geolocation) {
+        /*if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 const map = new google.maps.Map(document.getElementById('map'), {
                     center: {
                         lat: -17.7799086353198,
                         lng: -63.18265591059412
                     },
-                    zoom: 15
+                    zoom: 15,
+                    clickableIcons: false
                 });
 
                 const points = [
@@ -115,14 +116,15 @@
                 }
                 cargarAreasCriticas(map);
             });
-        } else {
+        } else {*/
             // Manejar el caso en el que el navegador no admita la geolocalización
             const map = new google.maps.Map(document.getElementById('map'), {
                 center: {
                     lat: -17.7799086353198,
                     lng: -63.18265591059412
                 },
-                zoom: 15
+                zoom: 15,
+                clickableIcons: false
             });
 
             const points = [
@@ -173,7 +175,7 @@
                 }
             }
             cargarAreasCriticas(map);
-        }
+        //}
     }
 
     function addMarker(location, map) {

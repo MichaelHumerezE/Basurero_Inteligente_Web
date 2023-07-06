@@ -26,7 +26,9 @@ class StoreRecepcionRequest extends FormRequest
         return [
             'fechaHora' => 'required',
             'cantidad' => 'required',
+            'observacion' => 'required',
             'id_basura' => 'required',
+            'id_recorrido' => 'required',
         ];
     }
 }

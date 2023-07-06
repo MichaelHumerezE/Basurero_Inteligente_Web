@@ -17,6 +17,7 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\RecepcionController;
 use App\Http\Controllers\ReclamoController;
 use App\Http\Controllers\RecorridoController;
 use App\Http\Controllers\RedController;
@@ -70,4 +71,5 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('/camiones', CamionController::class);
     route::resource('/redes', RedController::class);
     route::resource('/establecimientos', EstablecimientoController::class);
+    route::resource('/recepciones', RecepcionController::class);
 });

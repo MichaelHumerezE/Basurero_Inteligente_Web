@@ -28,5 +28,12 @@ class EstablecimientoSeeder extends Seeder
             'id_distrito' => 9,
             'id_red' => 1,
         ]);
+
+        Establecimiento::create([
+            'nombre' => 'Barrio Villa Union, Barrio San Isidro, Barrio San Fracisco, Barrio 15 de Noviembre, Barrio Polanco Plaza, Barrio LAB, Barrio 8 de Septiembre, Barrino Minero, Barrio Nuevo Mundo',
+            'id_ruta' => 5,
+            'id_distrito' => 8,
+            'id_red' => 1,
+        ]);
     }
 }

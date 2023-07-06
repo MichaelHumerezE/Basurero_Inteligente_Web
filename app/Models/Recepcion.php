@@ -10,8 +10,10 @@ class Recepcion extends Model
     use HasFactory;
 
     protected $fillable = [
-        'fecha',
+        'fechaHora',
         'cantidad',
+        'observacion',
         'id_basura',
+        'id_recorrido',
     ];
 }
