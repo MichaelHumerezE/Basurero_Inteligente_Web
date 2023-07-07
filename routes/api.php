@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AuthChoferController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\ChoferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +21,15 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthChoferController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthChoferController::class, 'logout']);
+    Route::get('/listaEmpleados', [ChoferController::class, 'listaEmpleados']);
+    Route::get('/listarCamiones', [ChoferController::class, 'listarCamiones']);
+    Route::post('/registrarEquipoDeRecorrido', [ChoferController::class, 'registrarEquipoDeRecorrido']);
+
 });
