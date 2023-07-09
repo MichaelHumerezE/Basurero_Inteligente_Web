@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>WEB</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="{{ url('assets/icon.png') }}" />
+    <title>Smart-Trucks</title>
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
+    <link rel="shortcut icon" href="{{ asset('img/icon.png') }}" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -23,9 +23,8 @@
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
         <div class="container">
-            <a class="brand" href="/home"><img class="brand-logo-dark" src="{{ url('assets/icon.png') }}"
-                    alt="" width="40px" height="40px" /></a>
-            <a class="navbar-brand" href="/home"> WEB</a>
+            <a class="navbar-brand" href="/home"><img class="brand-logo-dark" src="{{ url('assets/icon.png') }}"
+                    alt="" width="75px" /> Smart-Trucks</a>
             <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +103,7 @@
                 <div class="col-lg-4">
                     <h4 class="text-uppercase mb-4">About</h4>
                     <p class="lead mb-0">
-                        ...
+                        Este software es una aplicación diseñada para optimizar y gestionar eficientemente el proceso de recogida de residuos
                         <!--
                         <a href="http://startbootstrap.com">Start Bootstrap</a>
                         -->

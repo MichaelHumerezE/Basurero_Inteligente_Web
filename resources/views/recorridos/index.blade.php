@@ -50,7 +50,6 @@
                             <th>Fecha - Hora</th>
                             <th>Hora Inicio</th>
                             <th>Hora Fin</th>
-                            <th>Coordenadas</th>
                             <th>Equipo</th>
                             <th>Acciones</th>
                         </tr>
@@ -69,7 +68,7 @@
                                 <td>{{ $recorrido->fechaHora }}</td>
                                 <td>{{ $recorrido->horaIni }}</td>
                                 <td>{{ $recorrido->horaFin }}</td>
-                                <td>{{ $recorrido->coordenadas }}</td>
+                                <td>{{ $recorrido->id_equipoRecorrido }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         @can('ver-recorrido')

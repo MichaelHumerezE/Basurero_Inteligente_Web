@@ -54,8 +54,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
+                            <th>Observacion</th>
+                            <th>Cantidad</th>
+                            <th>Fecha - Hora</th>
+                            <th>Hora de Inicio</th>
+                            <th>Hora de Finalización</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -70,8 +73,11 @@
                         @foreach ($recepciones as $distrito)
                             <tr>
                                 <th scope="row">{{ $valor++ }}</th>
-                                <td>{{ $distrito->nombre }}</td>
-                                <td>{{ $distrito->descripcion }}</td>
+                                <td>{{ $distrito->observacion }}</td>
+                                <td>{{ $distrito->cantidad }} Kgs</td>
+                                <td>{{ $distrito->fechaHora }}</td>
+                                <td>{{ $distrito->recorridoHI }}</td>
+                                <td>{{ $distrito->recorridoHF }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         @can('ver-distrito')

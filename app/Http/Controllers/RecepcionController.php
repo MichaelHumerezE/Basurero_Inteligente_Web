@@ -20,7 +20,6 @@ class RecepcionController extends Controller
      */
     public function index(Request $request)
     {
-        $recepciones = recepcion::select('*')->orderBy('id','ASC');
         $recepciones = DB::table('recepcions')
             ->join('recorridos', 'recepcions.id_recorrido', '=', 'recorridos.id')
             ->join('basuras', 'recepcions.id_basura', '=', 'basuras.id')
@@ -31,9 +30,9 @@ class RecepcionController extends Controller
                 'recepcions.observacion',
                 'recorridos.horaIni AS recorridoHI',
                 'recorridos.horaFin AS recorridoHF',
-                'basuras.tipo AS basura',
+                'basuras.tipo AS basura'
             )
-            ->orderBy('recepciones.id', 'ASC');
+            ->orderBy('recepcions.id', 'ASC');
         $limit = (isset($request->limit)) ? $request->limit:10;
         if(isset($request->search)){
             $recepciones = $recepciones->where('recepcions.id','like','%'.$request->search.'%')

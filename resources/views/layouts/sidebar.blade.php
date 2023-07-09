@@ -2,10 +2,15 @@
         <!-- Sidebar  -->
         <nav id="sidebar" class="active">
             <div class="sidebar-header">
-                <h3>Servicio De Internet</h3>
-                <strong>SI</strong>
+                <center>
+                    <h3>
+                        <img class="brand-logo-dark" src="{{ url('assets/icon.png') }}" width="100" />
+                    </h3>
+                </center>
+                <strong>
+                    <img class="brand-logo-dark" src="{{ url('assets/icon.png') }}" alt="" width="40px"/>
+                </strong>
             </div>
-
             <ul class="list-unstyled components">
                 <li class="{{ 'home' == request()->path() ? 'active' : '' }}">
                     <a href="{{ url('/home') }}">
@@ -110,6 +115,7 @@
                         <b> Recepciones</b>
                     </a>
                 </li>
+                <!--
                 <li class="{{ 'alarmas' == Request::is('alarmas*') ? 'active' : '' }}">
                     <a href="{{ url('/alarmas') }}">
                         <i class="fas fa-bell"></i>
@@ -122,6 +128,7 @@
                         <b> Reclamos</b>
                     </a>
                 </li>
+            -->
             </ul>
         </nav>
     </div>
