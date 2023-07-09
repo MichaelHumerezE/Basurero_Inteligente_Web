@@ -138,8 +138,21 @@ class ChoferController extends Controller
     {
 
         $rutas = DB::table('rutas')
-            ->select(["rutas.id","rutas.origen","rutas.destino", "rutas.nombre as nombreRuta", "horarios.dia_semana", "horarios.hora_inicio", "horarios.hora_fin"])
+            ->select([
+                "rutas.id",
+                "rutas.origen",
+                "rutas.destino",
+                "rutas.nombre as nombreRuta",
+                "horarios.dia_semana",
+                "horarios.hora_inicio",
+                "horarios.hora_fin",
+                "distritos.nombre as nombreDistrito",
+                "zonas.nombre as nombreZonas",
+                ])
             ->join('horarios', 'horarios.id', '=', 'rutas.id_horario')
+            ->join('establecimientos', 'establecimientos.id_ruta', '=', 'rutas.id')
+            ->join('distritos', 'distritos.id', '=', 'establecimientos.id_distrito')
+            ->join('zonas', 'zonas.id', '=', 'distritos.id_zona')
             ->get();
 
         return $this->success(
