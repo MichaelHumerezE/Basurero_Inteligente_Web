@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Ruta;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Camion;
-use App\Models\EquipoRecorrido;
 use App\Traits\ApiResponder;
+use Illuminate\Http\Request;
+use App\Models\EquipoRecorrido;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEquipoRecorridoRequest;
+use App\Models\Recorrido;
 
 class ChoferController extends Controller
 {
@@ -131,7 +134,47 @@ class ChoferController extends Controller
     }
 
 
-    public function obtenerRutaDeCamnionero()
+    public function listarRutas()
     {
+
+        $rutas = DB::table('rutas')
+            ->select(["rutas.id","rutas.origen","rutas.destino", "rutas.nombre as nombreRuta", "horarios.dia_semana", "horarios.hora_inicio", "horarios.hora_fin"])
+            ->join('horarios', 'horarios.id', '=', 'rutas.id_horario')
+            ->get();
+
+        return $this->success(
+            "rutas",
+            $rutas
+        );
+    }
+
+    public function obtenerCoordenadaDeLaRuta(Request $request)
+    {
+
+        $coord= Ruta::select('coordenadas','origen')->where('id',$request->id_ruta)->get();
+
+        return $this->success(
+            "coord",
+            $coord
+        );
+    }
+
+    public function guardarRecorridoDelChofer(Request $request)
+    {
+        $converArrayAString = json_encode($request->coordenadas);
+        $data = new Recorrido();
+        $data->fechaHora = $request->fechaHora;
+        $data->horaIni = $request->horaIni;
+        $data->horaFin = $request->horaFin;
+        $data->coordenadas = $converArrayAString;
+        $data->id_ruta = $request->id_ruta;
+
+        $data->id_equipoRecorrido = $request->id_equipoRecorrido;
+        $data->save();
+
+        return $this->success(
+            "ok",
+
+        );
     }
 }
