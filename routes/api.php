@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\AuthChoferController;
+use App\Http\Controllers\API\AuthChoferController;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Api\ChoferController;
+use App\Http\Controllers\API\ChoferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
