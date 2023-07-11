@@ -43,6 +43,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="{{ 'datasets' == Request::is('datasets*') ? 'active' : '' }}">
+                    <a href="{{ url('/datasets') }}">
+                        <i class="fas fa-database"></i>
+                        <b> Datasets</b>
+                    </a>
+                </li>
                 <li class="{{ 'zonas' == Request::is('zonas*') ? 'active' : '' }}">
                     <a href="{{ url('/zonas') }}">
                         <i class="fas fa-chart-pie"></i>

@@ -5,6 +5,7 @@ use App\Http\Controllers\AreaCriticaController;
 use App\Http\Controllers\BasuraController;
 use App\Http\Controllers\CamionController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\DatasetController;
 use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\EquipoRecorridoController;
@@ -72,4 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('/redes', RedController::class);
     route::resource('/establecimientos', EstablecimientoController::class);
     route::resource('/recepciones', RecepcionController::class);
+    route::resource('/datasets', DatasetController::class);
+    Route::get('/datasets/query/{id}', [DatasetController::class, 'query'])->name('datasets.query');
+    Route::post('/datasets/query', [DatasetController::class, 'queryStore'])->name('datasets.queryStore');
 });
