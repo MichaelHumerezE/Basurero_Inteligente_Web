@@ -203,7 +203,14 @@ class DatasetController extends Controller
      */
     public function show($id)
     {
-        //
+        $dataset = Dataset::findOrFail($id);
+        $result = $this->s3Client->getObject([
+            'Bucket' => env('AWS_BUCKET'),
+            'Key'    => $dataset->carpeta,
+        ]);
+    
+        $csvContent = $result['Body']->getContents();
+        dd($csvContent);
     }
 
     /**

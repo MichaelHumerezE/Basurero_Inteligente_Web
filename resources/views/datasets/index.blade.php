@@ -90,6 +90,8 @@
                                             <a href="{{ route('datasets.edit', $dataset->id) }}" class="btn btn-primary"><i
                                                     class="fas fa-pencil-alt"></i></a>
                                         @endcan
+                                        <a href="{{ route('datasets.show', $dataset->id) }}" class="btn btn-info"><i
+                                            class="fas fa-eye"></i></a>
                                         @can('borrar-dataset')
                                             <button type="submit" class="btn btn-danger" form="delete_{{ $dataset->id }}"
                                                 onclick="return confirm('¿Estás seguro de eliminar el registro?')">
