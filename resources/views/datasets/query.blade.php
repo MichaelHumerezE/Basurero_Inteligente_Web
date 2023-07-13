@@ -28,6 +28,7 @@
                         </select>
                         <br>
                     </div>
+                    <!--
                     <div class="col-12">
                         <br>
                         <label>
@@ -43,6 +44,7 @@
                         </select>
                         <br>
                     </div>
+                -->
                     <div class="col-12">
                         <br>
                         <label>
@@ -58,6 +60,7 @@
                         </select>
                         <br>
                     </div>
+                    <!--
                     <div class="col-12">
                         <br>
                         <label>
@@ -73,6 +76,7 @@
                         </select>
                         <br>
                     </div>
+                
                     <div class="col-12">
                         <br>
                         <label>
@@ -103,6 +107,7 @@
                         </select>
                         <br>
                     </div>
+                -->
                     <div class="col-12">
                         <div class="form-floating">
                             <input type="date" placeholder="Fecha Inicio" class="form-control" name="fecha_inicio"

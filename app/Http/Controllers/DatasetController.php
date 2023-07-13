@@ -93,11 +93,11 @@ class DatasetController extends Controller
     {
         $names = [];
         $id_basura = $request->input('id_basura');
-        $id_establecimiento = $request->input('id_establecimiento');
+        //$id_establecimiento = $request->input('id_establecimiento');
         $id_distrito = $request->input('id_distrito');
-        $id_zona = $request->input('id_zona');
-        $id_horario = $request->input('id_horario');
-        $id_ruta = $request->input('id_ruta');
+        //$id_zona = $request->input('id_zona');
+        //$id_horario = $request->input('id_horario');
+        /*$id_ruta = $request->input('id_ruta');*/
         $fecha_ini = $request->input('fecha_inicio');
         $fecha_fin = $request->input('fecha_fin');
         $recorrido = Recepcion::query();
@@ -107,7 +107,7 @@ class DatasetController extends Controller
             array_push($names, $basura->tipo);
             $recorrido = $recorrido->where('id_basura', $id_basura);
         }
-        if ($id_zona != '') {
+        /*if ($id_zona != '') {
             $zona = Zona::findOrFail($id_zona);
             array_push($names, 'Zona: ');
             array_push($names, $zona->nombre);
@@ -116,7 +116,7 @@ class DatasetController extends Controller
                 ->join('establecimientos', 'rutas.id', '=', 'establecimientos.id_ruta')
                 ->join('distritos', 'establecimientos.id_distrito', '=', 'distritos.id')
                 ->join('zonas', 'distritos.id_zona', '=', 'zonas.id')->where('zonas.id', $id_zona);
-        }
+        }*/
         if ($id_distrito != '') {
             $distrito = Distrito::findOrFail($id_distrito);
             array_push($names, 'Distrito: ');
@@ -126,29 +126,29 @@ class DatasetController extends Controller
                 ->join('establecimientos', 'rutas.id', '=', 'establecimientos.id_ruta')
                 ->join('distritos', 'establecimientos.id_distrito', '=', 'distritos.id')->where('distritos.id', $id_distrito);
         }
-        if ($id_establecimiento != '') {
+        /*if ($id_establecimiento != '') {
             $establecimiento = establecimiento::findOrFail($id_establecimiento);
             array_push($names, 'Establecimiento: ');
             array_push($names, $establecimiento->nombre);
             $recorrido = $recorrido->join('recorridos', 'recepcions.id_recorrido', '=', 'recorridos.id')
                 ->join('rutas', 'recorridos.id_ruta', '=', 'rutas.id')
                 ->join('establecimientos', 'rutas.id', '=', 'establecimientos.id_ruta')->where('establecimientos.id', $id_establecimiento);
-        }
-        if ($id_ruta != '') {
+        }*/
+        /*if ($id_ruta != '') {
             $ruta = Ruta::findOrFail($id_ruta);
             array_push($names, 'Ruta: ');
             array_push($names, $ruta->nombre);
             $recorrido = $recorrido->join('recorridos', 'recepcions.id_recorrido', '=', 'recorridos.id')
                 ->join('rutas', 'recorridos.id_ruta', '=', 'rutas.id')->where('rutas.id', $id_ruta);
-        }
-        if ($id_horario != '') {
+        }*/
+        /*if ($id_horario != '') {
             $horario = Horario::findOrFail($id_horario);
             array_push($names, 'Horario: ');
-            array_push($names, $horario->dia_semana + '-' + $horario->hora_inicio + '-' + $horario->hora_fin);
+            array_push($names, $horario->dia_semana);
             $recorrido = $recorrido->join('recorridos', 'recepcions.id_recorrido', '=', 'recorridos.id')
                 ->join('rutas', 'recorridos.id_ruta', '=', 'rutas.id')->where('rutas.id', $id_ruta)
                 ->join('horarios', 'rutas.id_horario', '=', 'horarios.id')->where('horarios.id', $id_horario);
-        }
+        }*/
         $recorrido = $recorrido->select('recepcions.id', 'recepcions.fechaHora', 'recepcions.cantidad')->where('recepcions.fechaHora', '>=', $fecha_ini)->where('recepcions.fechaHora', '<=', $fecha_fin)
             ->orderBy('recepcions.fechaHora', 'ASC')->get();
         // CSV
