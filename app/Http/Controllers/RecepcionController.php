@@ -32,7 +32,7 @@ class RecepcionController extends Controller
                 'recorridos.horaFin AS recorridoHF',
                 'basuras.tipo AS basura'
             )
-            ->orderBy('recepcions.id', 'ASC');
+            ->orderBy('recepcions.fechaHora', 'DESC');
         $limit = (isset($request->limit)) ? $request->limit:10;
         if(isset($request->search)){
             $recepciones = $recepciones->where('recepcions.id','like','%'.$request->search.'%')
@@ -55,6 +55,14 @@ class RecepcionController extends Controller
     public function create()
     {
         $recorridos = Recorrido::get();
+        $recorridos = DB::table('recorridos')
+        ->join('rutas', 'recorridos.id_ruta', '=', 'rutas.id')
+        ->select(
+            'recorridos.id',
+            'recorridos.fechaHora',
+            'rutas.nombre AS ruta'
+        )
+        ->orderBy('recorridos.fechaHora', 'DESC')->get();
         $basuras = Basura::get();
         return view('recepciones.create', compact('recorridos', 'basuras'));
     }

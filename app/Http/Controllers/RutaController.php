@@ -10,6 +10,7 @@ use App\Models\Distrito;
 use App\Models\Horario;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RutaController extends Controller
 {

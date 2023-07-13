@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('carpeta');
             $table->string('filename');
             $table->string('nombres')->nullable();
+            $table->string('forecastArn')->nullable();
             $table->timestamps();
         });
     }

@@ -66,7 +66,7 @@
                         <select name="id_horario" class="form-control" id="id_horario" onchange="handleSelectChange()">
                             <option value=""> Seleccione Un Horario... </option>
                             @foreach ($horarios as $horario)
-                                <option value="{{ $horario->id }}" @if ((isset($ruta->id_horario) ? $ruta->id_horario : old('id_horario')) == $horario->id) selected @endif>
+                                <option value="{{ $horario->id }}">
                                     {{ $horario->dia_semana }} - {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}
                                 </option>
                             @endforeach

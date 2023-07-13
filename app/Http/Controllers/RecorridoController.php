@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Recorrido;
 use App\Http\Requests\StoreRecorridoRequest;
 use App\Http\Requests\UpdateRecorridoRequest;
+use App\Models\AreaCritica;
+use App\Models\Ruta;
 use Illuminate\Http\Request;
 
 class RecorridoController extends Controller
@@ -16,7 +18,7 @@ class RecorridoController extends Controller
      */
     public function index(Request $request)
     {
-        $recorridos = Recorrido::select('*')->orderBy('id','ASC');
+        $recorridos = Recorrido::select('*')->orderBy('fechaHora','DESC');
         $limit = (isset($request->limit)) ? $request->limit:10;
         if(isset($request->search)){
             $recorridos = $recorridos->where('id','like','%'.$request->search.'%')
@@ -58,7 +60,12 @@ class RecorridoController extends Controller
      */
     public function show($id)
     {
-        return "Falta";
+        $recorrido = Recorrido::findOrFail($id);
+        $ruta = Ruta::findOrFail($recorrido->id_ruta);
+        $puntos = json_decode($ruta->coordenadas);
+        $puntosR = json_decode($recorrido->coordenadas);
+        $areasCriticas = AreaCritica::where('id_ruta', $ruta->id)->get();
+        return view('recorridos.show', compact('ruta', 'puntos', 'recorrido', 'puntosR', 'areasCriticas'));
     }
 
     /**

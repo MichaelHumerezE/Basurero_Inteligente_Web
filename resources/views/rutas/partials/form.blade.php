@@ -56,126 +56,67 @@
     let markers = [];
 
     function initMap() {
-        /*if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const map = new google.maps.Map(document.getElementById('map'), {
-                    center: {
-                        lat: -17.7799086353198,
-                        lng: -63.18265591059412
-                    },
-                    zoom: 15,
-                    clickableIcons: false
-                });
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -17.7799086353198,
+                lng: -63.18265591059412
+            },
+            zoom: 15,
+            clickableIcons: false
+        });
 
-                const points = [
-                    <?php
-                    // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
-                    foreach ($puntos as $punto) {
-                        echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
-                    }
-                    ?>
-                ];
-
-                if (points.length > 1) {
-                    markers[0] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
-                        map: map,
-                        title: 'Origen'
-                    });
-
-                    markers[1] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points
-                            .length - 1]['lng']),
-                        map: map,
-                        title: 'Destino'
-                    });
-
-                    const polylinePath = points.map(function(point) {
-                        return new google.maps.LatLng(point.lat, point.lng);
-                    });
-
-                    polyline = new google.maps.Polyline({
-                        path: polylinePath,
-                        strokeColor: "#00000",
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-
-                    polyline.setMap(map);
-                } else {
-                    map.addListener('click', function(event) {
-                        addMarker(event.latLng, map);
-                    });
-
-                    for (let i = 0; i < points.length; i++) {
-                        markers[i] = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
-                            map: map
-                        });
-                    }
-                }
-                cargarAreasCriticas(map);
-            });
-        } else {*/
-            // Manejar el caso en el que el navegador no admita la geolocalización
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: -17.7799086353198,
-                    lng: -63.18265591059412
-                },
-                zoom: 15,
-                clickableIcons: false
-            });
-
-            const points = [
-                <?php
-                // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
-                foreach ($puntos as $punto) {
-                    echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
-                }
-                ?>
-            ];
-
-            if (points.length > 1) {
-                markers[0] = new google.maps.Marker({
-                    position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
-                    map: map,
-                    title: 'Origen'
-                });
-
-                markers[1] = new google.maps.Marker({
-                    position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points.length - 1]
-                        ['lng']),
-                    map: map,
-                    title: 'Destino'
-                });
-
-                const polylinePath = points.map(function(point) {
-                    return new google.maps.LatLng(point.lat, point.lng);
-                });
-
-                polyline = new google.maps.Polyline({
-                    path: polylinePath,
-                    strokeColor: "#00000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
-                });
-
-                polyline.setMap(map);
-            } else {
-                map.addListener('click', function(event) {
-                    addMarker(event.latLng, map);
-                });
-
-                for (let i = 0; i < points.length; i++) {
-                    markers[i] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
-                        map: map
-                    });
-                }
+        const points = [
+            <?php
+            // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
+            foreach ($puntos as $punto) {
+                echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
             }
-            cargarAreasCriticas(map);
-        //}
+            ?>
+        ];
+
+        if (points.length != 0) {
+            map.setCenter(points[0]);
+        }
+
+        if (points.length > 1) {
+            markers[0] = new google.maps.Marker({
+                position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
+                map: map,
+                title: 'Origen'
+            });
+
+            markers[1] = new google.maps.Marker({
+                position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points.length - 1]
+                    ['lng']),
+                map: map,
+                title: 'Destino'
+            });
+
+            const polylinePath = points.map(function(point) {
+                return new google.maps.LatLng(point.lat, point.lng);
+            });
+
+            polyline = new google.maps.Polyline({
+                path: polylinePath,
+                strokeColor: "#00000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            polyline.setMap(map);
+        } else {
+            map.addListener('click', function(event) {
+                addMarker(event.latLng, map);
+            });
+
+            for (let i = 0; i < points.length; i++) {
+                markers[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
+                    map: map
+                });
+            }
+        }
+        cargarAreasCriticas(map);
     }
 
     function addMarker(location, map) {

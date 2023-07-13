@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CamionSeeder::class);
         $this->call(BasuraSeeder::class);
         $this->call(EstablecimientoSeeder::class);
+        $this->call(DatasetSeeder::class);
+        $this->call(AreaCriticaSeeder::class);
     }
 }

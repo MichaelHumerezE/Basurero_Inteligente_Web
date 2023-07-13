@@ -56,8 +56,7 @@
                             <th>#</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
+                            <th>Origen - Destino</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -74,8 +73,7 @@
                                 <th scope="row">{{ $valor++ }}</th>
                                 <td>{{ $ruta->nombre }}</td>
                                 <td>{{ $ruta->descripcion }}</td>
-                                <td>{{ $ruta->origen }}</td>
-                                <td>{{ $ruta->destino }}</td>
+                                <td>{{ $ruta->origen }} - {{ $ruta->destino }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         @can('ver-ruta')

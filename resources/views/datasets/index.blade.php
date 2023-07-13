@@ -6,7 +6,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-3">
+                <div class="col-4">
                     <div class="form-group">
                         <a class="navbar-brand">Listar</a>
                         <select class="form-select" id="limit" name="limit">
@@ -31,7 +31,7 @@
                         ?>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-6">
                     <div class="form-group">
                         <a class="navbar-brand">Buscar</a>
                         <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search"
@@ -39,17 +39,9 @@
                     </div>
                 </div>
                 <div class="col-1">
-                        <a href="{{ route('datasets.query', 1) }}" class="btn btn-primary ml-auto">
-                            <i class="fas fa-plus"></i>
-                            Consultas</a>
-                </div>
-                <div class="col-1"></div>
-                <div class="col-1">
-                    @can('crear-dataset')
-                        <a href="{{ route('datasets.create') }}" class="btn btn-primary ml-auto">
-                            <i class="fas fa-plus"></i>
-                            Agregar</a>
-                    @endcan
+                    <a href="{{ route('datasets.query', 1) }}" class="btn btn-primary ml-auto">
+                        <i class="fas fa-plus"></i>
+                        Consultas</a>
                 </div>
                 @if ($datasets->total() > 10)
                     {{ $datasets->links() }}
@@ -83,15 +75,15 @@
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         @can('ver-dataset')
-                                            <a href="{{url($dataset->url)}}" class="btn btn-info"><i
+                                            <a href="{{ url($dataset->url) }}" class="btn btn-info"><i
                                                     class="fas fa-download"></i></a>
                                         @endcan
                                         @can('editar-dataset')
                                             <a href="{{ route('datasets.edit', $dataset->id) }}" class="btn btn-primary"><i
-                                                    class="fas fa-pencil-alt"></i></a>
+                                                    class="fas fa-upload"></i></a>
                                         @endcan
                                         <a href="{{ route('datasets.show', $dataset->id) }}" class="btn btn-info"><i
-                                            class="fas fa-eye"></i></a>
+                                                class="fas fa-chart-area"></i></a>
                                         @can('borrar-dataset')
                                             <button type="submit" class="btn btn-danger" form="delete_{{ $dataset->id }}"
                                                 onclick="return confirm('¿Estás seguro de eliminar el registro?')">
@@ -104,19 +96,57 @@
                                                 @method('DELETE')
                                             </form>
                                         @endcan
+                                        <a href="#" class="btn btn-primary" data-target="#myModal{{ $dataset->id }}"
+                                            data-toggle="modal"><i class="fas fa-chart-line"></i></a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal{{ $dataset->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel">Título del modal</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('datasets.store') }}" method="POST"
+                                                            enctype="multipart/form-data" id="predict{{$dataset->id}}">
+                                                            @csrf
+                                                            <!-- Contenido del modal -->
+                                                            <div class="form-floating">
+                                                                <input type="hidden" value="{{ $dataset->id }}"
+                                                                    name="id_dataset">
+                                                                <input type="number" name="cantidad"
+                                                                    placeholder="Cantidad de Dias a Predecir ..."
+                                                                    class="form-control">
+                                                                <label>Cantidad de Dias a Predecir...</label>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-primary"
+                                                            form="predict{{$dataset->id}}">Guardar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
+                </div>
+                </td>
+                    </tr>
+                    @endforeach
                     </tbody>
                 </table>
-            </div>
         </div>
-        <div class="card-footer">
-            @if ($datasets->total() > 10)
-                {{ $datasets->links() }}
-            @endif
-        </div>
+    </div>
+    <div class="card-footer">
+        @if ($datasets->total() > 10)
+            {{ $datasets->links() }}
+        @endif
     </div>
     <!-- JS PARA FILTAR Y BUSCAR MEDIANTE PAGINADO -->
     <Script type="text/javascript">
@@ -131,5 +161,19 @@
                     $(this).val()
             }
         })
+
+        // Escucha el evento 'submit' del formulario
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita el envío del formulario
+
+            // Realiza aquí las acciones que desees antes de enviar el formulario
+            // ...
+
+            // Cierra el modal después de procesar las acciones
+            $('#myModal').modal('hide');
+
+            // Envía el formulario manualmente
+            this.submit();
+        });
     </Script>
 @endsection

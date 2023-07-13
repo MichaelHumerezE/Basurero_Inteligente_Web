@@ -1,64 +1,5 @@
 @csrf
 <div class="row">
-    <div class="col-12">
-        <div class="form-floating">
-            <input type="text" placeholder="nombre" class="form-control" name="nombre"
-                value="{{ isset($recorrido) ? $recorrido->nombre : old('nombre') }}">
-            <label>Nombre</label>
-        </div>
-    </div>
-    <div class="col-12">
-        <div class="form-floating">
-            <input type="text" placeholder="descripcion" class="form-control" name="descripcion"
-                value="{{ isset($recorrido) ? $recorrido->descripcion : old('descripcion') }}">
-            <label>Descripción</label>
-        </div>
-    </div>
-    <div class="col-12">
-        <br>
-        <label>
-            <h5>Elegir un Horario</h5>
-        </label>
-        <select name="id_horario" class="form-control">
-            <option value=""> Seleccione Un Horario... </option>
-            @foreach ($horarios as $horario)
-                <option value="{{ $horario->id }}" @if ((isset($recorrido->id_horario) ? $recorrido->id_horario : old('id_horario')) == $horario->id) selected @endif>
-                    {{ $horario->dia_semana }} - {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}
-                </option>
-            @endforeach
-        </select>
-        <br>
-    </div>
-    <div class="col-12">
-        <br>
-        <label>
-            <h5>Elegir un Distrito</h5>
-        </label>
-        <select name="id_distrito" class="form-control">
-            <option value=""> Seleccione Un Distrito... </option>
-            @foreach ($distritos as $distrito)
-                <option value="{{ $distrito->id }}" @if ((isset($recorrido->id_distrito) ? $recorrido->id_distrito : old('id_distrito')) == $distrito->id) selected @endif>
-                    {{ $distrito->nombre }}
-                </option>
-            @endforeach
-        </select>
-        <br>
-    </div>
-    <div class="col-12">
-        <div class="form-floating">
-            <input type="hidden" name="coordenadas" value="" id="coordenadas">
-        </div>
-    </div>
-    <div class="col-12">
-        <div class="form-floating">
-            <input type="hidden" name="origen" value="" id="origen">
-        </div>
-    </div>
-    <div class="col-12">
-        <div class="form-floating">
-            <input type="hidden" name="destino" value="" id="destino">
-        </div>
-    </div>
 </div>
 <!--------------------------------------------------------------------------------->
 
@@ -71,124 +12,114 @@
     let markers = [];
 
     function initMap() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const map = new google.maps.Map(document.getElementById('map'), {
-                    center: {
-                        lat: -17.7799086353198,
-                        lng: -63.18265591059412
-                    },
-                    zoom: 15
-                });
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: -17.7799086353198,
+                lng: -63.18265591059412
+            },
+            zoom: 15,
+            clickableIcons: false
+        });
 
-                const points = [
-                    <?php
-                    // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
-                    foreach ($puntos as $punto) {
-                        echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
-                    }
-                    ?>
-                ];
-
-                if (points.length > 1) {
-                    markers[0] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
-                        map: map,
-                        title: 'Origen'
-                    });
-
-                    markers[1] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points
-                            .length - 1]['lng']),
-                        map: map,
-                        title: 'Destino'
-                    });
-
-                    const polylinePath = points.map(function(point) {
-                        return new google.maps.LatLng(point.lat, point.lng);
-                    });
-
-                    polyline = new google.maps.Polyline({
-                        path: polylinePath,
-                        strokeColor: "#00000",
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-
-                    polyline.setMap(map);
-                } else {
-                    map.addListener('click', function(event) {
-                        addMarker(event.latLng, map);
-                    });
-
-                    for (let i = 0; i < points.length; i++) {
-                        markers[i] = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
-                            map: map
-                        });
-                    }
-                }
-                cargarAreasCriticas(map);
-            });
-        } else {
-            // Manejar el caso en el que el navegador no admita la geolocalización
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: -17.7799086353198,
-                    lng: -63.18265591059412
-                },
-                zoom: 15
-            });
-
-            const points = [
-                <?php
-                // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
-                foreach ($puntos as $punto) {
-                    echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
-                }
-                ?>
-            ];
-
-            if (points.length > 1) {
-                markers[0] = new google.maps.Marker({
-                    position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
-                    map: map,
-                    title: 'Origen'
-                });
-
-                markers[1] = new google.maps.Marker({
-                    position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points.length - 1]
-                        ['lng']),
-                    map: map,
-                    title: 'Destino'
-                });
-
-                const polylinePath = points.map(function(point) {
-                    return new google.maps.LatLng(point.lat, point.lng);
-                });
-
-                polyline = new google.maps.Polyline({
-                    path: polylinePath,
-                    strokeColor: "#00000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
-                });
-
-                polyline.setMap(map);
-            } else {
-                map.addListener('click', function(event) {
-                    addMarker(event.latLng, map);
-                });
-
-                for (let i = 0; i < points.length; i++) {
-                    markers[i] = new google.maps.Marker({
-                        position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
-                        map: map
-                    });
-                }
+        const points = [
+            <?php
+            // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
+            foreach ($puntos as $punto) {
+                echo '{ lat: ' . $punto->lat . ', lng: ' . $punto->lng . '},';
             }
-            cargarAreasCriticas(map);
+            ?>
+        ];
+
+        const pointsR = [
+            <?php
+            // Supongamos que tienes un arreglo de objetos stdClass llamado $sucursales
+            foreach ($puntosR as $puntoR) {
+                echo '{ lat: ' . $puntoR->lat . ', lng: ' . $puntoR->lng . '},';
+            }
+            ?>
+        ];
+
+        if (pointsR.length != 0) {
+            map.setCenter(pointsR[0]);
         }
+
+        if (points.length > 1) {
+            /*markers[0] = new google.maps.Marker({
+                position: new google.maps.LatLng(points[0]['lat'], points[0]['lng']),
+                map: map,
+                title: 'Origen'
+            });
+
+            markers[1] = new google.maps.Marker({
+                position: new google.maps.LatLng(points[points.length - 1]['lat'], points[points.length - 1]
+                    ['lng']),
+                map: map,
+                title: 'Destino'
+            });*/
+
+            const polylinePath = points.map(function(point) {
+                return new google.maps.LatLng(point.lat, point.lng);
+            });
+
+            polyline = new google.maps.Polyline({
+                path: polylinePath,
+                strokeColor: "#00000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            polyline.setMap(map);
+        } else {
+            map.addListener('click', function(event) {
+                addMarker(event.latLng, map);
+            });
+
+            for (let i = 0; i < points.length; i++) {
+                markers[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(points[i]['lat'], points[i]['lng']),
+                    map: map
+                });
+            }
+        }
+        if (pointsR.length > 1) {
+            markers[0] = new google.maps.Marker({
+                position: new google.maps.LatLng(pointsR[0]['lat'], pointsR[0]['lng']),
+                map: map,
+                title: 'Origen'
+            });
+
+            markers[1] = new google.maps.Marker({
+                position: new google.maps.LatLng(pointsR[pointsR.length - 1]['lat'], pointsR[pointsR.length - 1]
+                    ['lng']),
+                map: map,
+                title: 'Destino'
+            });
+
+            const polylinePath = pointsR.map(function(point) {
+                return new google.maps.LatLng(point.lat, point.lng);
+            });
+
+            polyline = new google.maps.Polyline({
+                path: polylinePath,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            polyline.setMap(map);
+        } else {
+            map.addListener('click', function(event) {
+                addMarker(event.latLng, map);
+            });
+
+            for (let i = 0; i < points.length; i++) {
+                markers[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(pointsR[i]['lat'], pointsR[i]['lng']),
+                    map: map
+                });
+            }
+        }
+        cargarAreasCriticas(map);
     }
 
     function addMarker(location, map) {
@@ -245,7 +176,7 @@
                     position: new google.maps.LatLng(element.latitud, element.longitud),
                     map: map,
                     icon: {
-                        url: '/assets/img/icons/critico.png', // recorrido al archivo de ícono personalizado
+                        url: '/assets/img/icons/critico.png', // Ruta al archivo de ícono personalizado
                         scaledSize: new google.maps.Size(30, 30), // Tamaño personalizado del ícono
                     }
                 });

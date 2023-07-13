@@ -23,7 +23,7 @@
             <option value=""> Seleccione Una Recorrido... </option>
             @foreach ($recorridos as $recorrido)
                 <option value="{{ $recorrido->id }}" @if ((isset($recepcion->id_recorrido) ? $recepcion->id_recorrido : old('id_recorrido')) == $recorrido->id) selected @endif>
-                    {{ $recorrido->fechaHora }} - {{ $recorrido->id_ruta }}
+                    {{ $recorrido->fechaHora }} - {{ $recorrido->ruta }}
                 </option>
             @endforeach
         </select>

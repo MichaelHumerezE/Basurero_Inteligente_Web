@@ -32,7 +32,7 @@
                         ?>
                     </div>
                 </div>
-                <div class="col-7">
+                <div class="col-6">
                     <div class="form-group">
                         <a class="navbar-brand">Buscar</a>
                         <input class="form-control mr-sm-2" type="search" id="search" placeholder="Search"

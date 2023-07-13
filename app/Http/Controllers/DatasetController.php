@@ -12,18 +12,23 @@ use App\Models\Horario;
 use App\Models\Recepcion;
 use App\Models\Ruta;
 use App\Models\Zona;
+use Aws\Exception\AwsException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Aws\ForecastService\ForecastServiceClient;
+use Aws\ForecastQueryService\ForecastQueryServiceClient;
 use Aws\S3\S3Client;
+use Carbon\Carbon;
 use DateTime;
+use Exception;
 
 date_default_timezone_set('America/La_Paz');
 
 class DatasetController extends Controller
 {
     protected $forecast;
+    protected $forecastQuery;
     protected $s3Client;
 
     public function __construct()
@@ -45,6 +50,15 @@ class DatasetController extends Controller
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
+
+        $this->forecastQuery = new ForecastQueryServiceClient([
+            'version' => 'latest',
+            'region' => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+        ]);
     }
 
     /**
@@ -58,7 +72,7 @@ class DatasetController extends Controller
         $limit = (isset($request->limit)) ? $request->limit : 10;
         if (isset($request->search)) {
             $datasets = $datasets->where('id', 'like', '%' . $request->search . '%')
-            ->orWhere('nombres', 'like', '%' . $request->search . '%');
+                ->orWhere('nombres', 'like', '%' . $request->search . '%');
         }
         $datasets = $datasets->paginate($limit)->appends($request->all());
         return view('datasets.index', compact('datasets'));
@@ -70,7 +84,7 @@ class DatasetController extends Controller
         $establecimientos = establecimiento::get();
         $distritos = Distrito::get();
         $zonas = Zona::get();
-        $horarios = Zona::get();
+        $horarios = Horario::get();
         $rutas = Ruta::get();
         return view('datasets.query', compact('basuras', 'establecimientos', 'distritos', 'zonas', 'horarios', 'rutas'));
     }
@@ -181,7 +195,25 @@ class DatasetController extends Controller
      */
     public function create()
     {
-        //
+        /*$response = $this->forecastQuery->queryForecast([
+            'EndDate' => '2023-03-01T00:00:00',
+            'Filters' => [
+                'item_id' => '1'
+            ],
+            'ForecastArn' => 'arn:aws:forecast:us-east-1:630886284847:forecast/forecast',
+            'StartDate' => '2022-12-30T00:00:00',
+        ]);
+        $forecastData = $response->get('Forecast');
+        $p10s = $forecastData['Predictions']['p10'];
+        $datesP10s[] = array_column($p10s, 'Timestamp');
+        $quantitiesP10s[] = array_column($p10s, 'Value');
+        $p50s = $forecastData['Predictions']['p50'];
+        $datesP50s[] = array_column($p50s, 'Timestamp');
+        $quantitiesP50s[] = array_column($p50s, 'Value');
+        $p90s = $forecastData['Predictions']['p90'];
+        $datesP90s[] = array_column($p90s, 'Timestamp');
+        $quantitiesP90s[] = array_column($p90s, 'Value');
+        return view('datasets.create', compact('datesP10s', 'quantitiesP10s', 'datesP50s', 'quantitiesP50s', 'datesP90s', 'quantitiesP90s'));*/
     }
 
     /**
@@ -192,7 +224,39 @@ class DatasetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dataset = Dataset::findOrFail($request->id_dataset);
+        $fechaIni = Carbon::parse('2022-12-30'); // Fecha inicial
+        $fechaFin = $fechaIni->addDays($request->cantidad);
+        $dias = $request->cantidad;
+        // Obtener la nueva fecha en un formato específico
+        $fechaFin = $fechaFin->format('Y-m-d');
+        try {
+            $response = $this->forecastQuery->queryForecast([
+                'EndDate' => $fechaFin . 'T00:00:00',
+                'Filters' => [
+                    'item_id' => '1'
+                ],
+                'ForecastArn' => $dataset->forecastArn,
+                'StartDate' => '2022-12-30T00:00:00',
+            ]);
+            $forecastData = $response->get('Forecast');
+            $p10s = $forecastData['Predictions']['p10'];
+            $datesP10s[] = array_column($p10s, 'Timestamp');
+            $quantitiesP10s[] = array_column($p10s, 'Value');
+            $p50s = $forecastData['Predictions']['p50'];
+            $datesP50s[] = array_column($p50s, 'Timestamp');
+            $quantitiesP50s[] = array_column($p50s, 'Value');
+            $p90s = $forecastData['Predictions']['p90'];
+            $datesP90s[] = array_column($p90s, 'Timestamp');
+            $quantitiesP90s[] = array_column($p90s, 'Value');
+            return view('datasets.create', compact('datesP10s', 'quantitiesP10s', 'datesP50s', 'quantitiesP50s', 'datesP90s', 'quantitiesP90s', 'dias'));
+        } catch (AwsException $e) {
+            return redirect()->route('datasets.index')->with('danger', $e->getMessage());
+        }catch (Exception $e) {
+            // Maneja otras excepciones generales
+            return redirect()->route('datasets.index')->with('danger', $e->getMessage());
+            // Realiza acciones para manejar el error de manera general, como registrar, notificar o manejar la excepción
+        }
     }
 
     /**
@@ -204,13 +268,27 @@ class DatasetController extends Controller
     public function show($id)
     {
         $dataset = Dataset::findOrFail($id);
+        $nombres = json_decode($dataset->nombres);
         $result = $this->s3Client->getObject([
             'Bucket' => env('AWS_BUCKET'),
             'Key'    => $dataset->carpeta,
         ]);
-    
-        $csvContent = $result['Body']->getContents();
-        dd($csvContent);
+        $csvContents = $result['Body']->getContents();
+        //dd($csvContents);
+        $lines = explode("\n", $csvContents);
+        $headers = str_getcsv(array_shift($lines));
+        $timestamps = [];
+        $values = [];
+        foreach ($lines as $line) {
+            if (trim($line) !== '') {
+                $row = str_getcsv(trim($line), ',', '"');
+                $entry = array_combine($headers, $row);
+
+                $timestamps[] = $entry['timestamp'];
+                $values[] = $entry['target_value'];
+            }
+        }
+        return view('datasets.show', compact('timestamps', 'values', 'nombres'));
     }
 
     /**
@@ -222,56 +300,69 @@ class DatasetController extends Controller
     public function edit($id)
     {
         $dataset = Dataset::findOrFail($id);
-        $archivoS3 = $this->s3Client->getObject([
-            'Bucket' => env('AWS_BUCKET'),
-            'Key' => $dataset->carpeta,
+        $name = str_replace('.csv', '', $dataset->filename);
+        $response = $this->forecast->createDatasetGroup([
+            'DatasetGroupName' => 'DatasetGroup' . $name,
+            'Domain' => 'CUSTOM'
         ]);
-        $contenidoArchivo = $archivoS3['Body']->getContents();
-        //dd($contenidoArchivo);
-        $name = date('Y-m-d H:i:s');
-        $name = str_replace([':', ' ', '-'], '_', $name);
-        // Dominio
-        /*$response = $this->forecast->createDomain([
-            'DomainName' => 'dominio_' . $name,
-            'DatasetGroupName' => 'dataset_group' . $name,
-        ]);*/
-        $arnDominio = 'arn:aws:forecast:us-east-1:630886284847:dataset-group/dataset_group';
-        // Dataset
-        $response = $this->forecast->createDataset([
-            'DomainArn' => $arnDominio, // Reemplaza con el ARN del dominio creado anteriormente
+        $DatasetGroupArn = $response->get('DatasetGroupArn');
+        /*$response = $this->forecast->createDataset([
+            'DatasetName' => 'Dataset' . $name,
             'DatasetType' => 'TARGET_TIME_SERIES',
-            'DatasetName' => 'dataset_' . $name,
-            // Agrega otros parámetros específicos del conjunto de datos según tus necesidades
+            'Domain' => 'CUSTOM',
+            'Schema' => [
+                'Attributes' => [
+                    [
+                        'AttributeName' => 'timestamp',
+                        'AttributeType' => 'string'
+                    ],
+                    [
+                        'AttributeName' => 'target_value',
+                        'AttributeType' => 'string'
+                    ],
+                    [
+                        'AttributeName' => 'item_id',
+                        'AttributeType' => 'string'
+                    ]
+                ]
+            ],
         ]);
-        $nombreDataset = $response['DatasetArn'];
-        //
+        $DatasetArn = $response->get('DatasetArn');
         $response = $this->forecast->createDatasetImportJob([
-            'DatasetImportJobName' => 'datasetImportJob' . $name,
-            'DatasetArn' => $arnDominio . '/' . $nombreDataset,
+            'DatasetArn' => $DatasetArn,
+            'DatasetImportJobName' => 'DatasetImportJob' . $name,
             'DataSource' => [
                 'S3Config' => [
-                    'Path' => $dataset->carpeta,
-                    'RoleArn' => 'arn:aws:iam::630886284847:user/proy-event-foto', // Reemplaza con el ARN del rol de IAM con acceso a S3
-                ],
+                    [
+                        'Path' => 's3://bucket-dataset-science/' . $dataset->carpeta,
+                        'RoleArn' => 'arn:aws:iam::630886284847:role/service-role/AmazonForecast-ExecutionRole-1689045127457'
+                    ]
+                ]
             ],
-            'TimestampFormat' => 'yyyy-MM-dd HH:mm:ss',
         ]);
-        //
-        $nombreModelo = 'modelo' . $name; // Reemplaza con el nombre del modelo en Forecast
+        $DatasetImportJobArn = $response->get('DatasetImportJobArn');
+        /*
+        $response = $this->forecast->createPredictor([
+            'FeaturizationConfig' => [
+                'ForecastFrequency' => '1D'
+            ],
+            'ForecastHorizon' => '10',
+            'InputDataConfig' => [
+                'DatasetGroupArn' => $DatasetGroupArn
+            ],
+            'PredictorName' => 'Predictor'.$name,
 
+        ]);
+        $PredictorArn = $response->get('PredictorArn');
         $response = $this->forecast->createForecast([
-            'ForecastName' => 'pronostico' . $name,
-            'PredictorArn' => $arnDominio . '/' . $nombreModelo,
+            'ForecastName' => 'Forecast'.$name,
+            'PredictorArn' => $PredictorArn,
         ]);
-        //
-        $arnPronostico = $response['ForecastArn'];
-
-        $response = $this->forecast->getForecast([
-            'ForecastArn' => $arnPronostico,
-        ]);
-
-        $resultadosPronostico = $response['Forecast']['Predictions'];
-        dd($resultadosPronostico);
+        $ForecastArn = $response->get('ForecastArn');
+        $dataset->forecastArn = $ForecastArn;
+        $dataset->save();
+        */
+        return redirect()->route('datasets.index')->with('mensaje', 'Éxito');
     }
 
     /**
