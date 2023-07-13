@@ -104,7 +104,7 @@
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel">Título del modal</h4>
+                                                        <h4 class="modal-title" id="myModalLabel">Predecir</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -129,7 +129,7 @@
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Cerrar</button>
                                                         <button type="submit" class="btn btn-primary"
-                                                            form="predict{{$dataset->id}}">Guardar</button>
+                                                            form="predict{{$dataset->id}}">Enviar</button>
                                                     </div>
                                                 </div>
                                             </div>
