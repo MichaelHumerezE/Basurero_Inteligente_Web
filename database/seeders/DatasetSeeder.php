@@ -19,7 +19,7 @@ class DatasetSeeder extends Seeder
             'url' => 'https://bucket-dataset-science.s3.amazonaws.com/datasets/2023_07_11_00_35_34.csv',
             'carpeta' => 'datasets/2023_07_11_00_35_34.csv',
             'filename' => '2023_07_11_00_35_34.csv',
-            'forecastArn' => 'arn:aws:forecast:us-east-1:630886284847:forecast/forecast'
+            'forecastArn' => 'arn:aws:forecast:us-east-1:630886284847:forecast/forecast_1_4'
         ]);
     }
 }
